@@ -118,14 +118,14 @@ class Quest {
 
 // modèle des quêtes de type Challenge
 class Challenge: Quest, Identifiable {
-    var type: ChallengeType
+    var challengeType: ChallengeType
     var image: String
     var startDate: Date?
     var endDate: Date?
     var isCompleted: Bool
     
-    init(title: String, questDescription: String, progress: Int, total: Int, type: ChallengeType, image: String, startDate: Date?, endDate: Date?, isCompleted: Bool) {
-        self.type = type
+    init(title: String, questDescription: String, progress: Int, total: Int, challengeType: ChallengeType, image: String, startDate: Date?, endDate: Date?, isCompleted: Bool) {
+        self.challengeType = challengeType
         self.image = image
         self.startDate = startDate
         self.endDate = endDate
