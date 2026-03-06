@@ -17,7 +17,7 @@ struct User: Identifiable {
     let email: String // unique
     
     // (pour profil)
-    let image: String
+    let image: String?
     let age: Int // >= 15
     
     // (pour données relatives à son journal, ses quêtes et ses stats)
