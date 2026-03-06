@@ -17,19 +17,16 @@ let usersData: [User] = [
         image: "luna",
         age: 22,
         entries: entriesData,
-        challenges: challengesData,
-        stamps: stampsData
+        quests: questsData
     ),
 
     User(
         username: "alex",
         password: "password",
         email: "alex@gmail.com",
-        image: nil,
+        image: "default",
         age: 27,
-        entries: nil,
-        challenges: challengesMultiData,
-        stamps: stampsData2
+        quests: questsData2
     )
 ]
 
@@ -81,128 +78,88 @@ let entriesData: [Entry] = [
     )
 ]
 
-// Tableaux de Challenges
+// Tableaux de quests
     // pour User1
-let challengesData: [Challenge] = [
+let questsData: [Quest] = [
 
-    Challenge(
+    Quest(
         title: "Streak 5 Jours",
         questDescription: "Enregistrez 5 entrées consécutives!",
         progress: 2,
-        total: 7,
-        challengeType: .solo,
-        image: "breathing",
-        startDate: Date(),
-        endDate: nil,
-        isCompleted: false
+        total: 7
     ),
 
-    Challenge(
+    Quest(
         title: "15 entrées (Mars)",
         questDescription: "Enregistrez 15 entrées en mars!",
         progress: 5,
-        total: 5,
-        challengeType: .solo,
-        image: "walk",
-        startDate: Date(),
-        endDate: Date(),
-        isCompleted: true
+        total: 5
     ),
 
-    Challenge(
+    Quest(
         title: "Artiste dans l’âme",
         questDescription: "Dessinez sur 10 entrées consécutives!",
         progress: 3,
-        total: 10,
-        challengeType: .solo,
-        image: "gratitude",
-        startDate: Date(),
-        endDate: nil,
-        isCompleted: false
+        total: 10
     ),
     
-    Challenge(
+    Quest(
         title: "Challenge gratitude",
         questDescription: "Partager chaque jour quelque chose de positif.",
         progress: 3,
-        total: 1000,
-        challengeType: .multi,
-        image: "gratitude",
-        startDate: Date(),
-        endDate: nil,
-        isCompleted: false
+        total: 1000
+    ),
+    
+    Quest(
+        title: "Nombre d’entrées",
+        questDescription: "Nombre d’entrées totales enregistrées dans l’application. Parce qu’il fait bon de se sentir comme chez soi...",
+        progress: 22,
+        total: 50
+    ),
+
+    Quest(
+        title: "Entrées musicales",
+        questDescription: "...",
+        progress: 4,
+        total: 20
+    ),
+
+    Quest(
+        title: "Challenges complétés",
+        questDescription: "...",
+        progress: 3,
+        total: 5
     )
 ]
 
     // Pour User2
-let challengesMultiData: [Challenge] = [
+let questsData2: [Quest] = [
 
-    Challenge(
+    Quest(
         title: "Challenge gratitude",
         questDescription: "Partager chaque jour quelque chose de positif.",
-        progress: 1,
-        total: 1000,
-        challengeType: .multi,
-        image: "gratitude",
-        startDate: Date(),
-        endDate: nil,
-        isCompleted: false
-    )
-]
-
-// Tableau de Stamps
-    //Pour User1
-let stampsData: [Stamp] = [
-
-    Stamp(
+        progress: 3,
+        total: 1000
+    ),
+    
+    Quest(
         title: "Nombre d’entrées",
         questDescription: "Nombre d’entrées totales enregistrées dans l’application. Parce qu’il fait bon de se sentir comme chez soi...",
         progress: 22,
-        total: 50,
-        level: 2
+        total: 50
     ),
 
-    Stamp(
+    Quest(
         title: "Entrées musicales",
         questDescription: "...",
         progress: 4,
-        total: 20,
-        level: 2
+        total: 20
     ),
 
-    Stamp(
-        title: "Challenges complétés",
+    Quest(
+        title: "quests complétés",
         questDescription: "...",
         progress: 3,
-        total: 5,
-        level: 3
-    )
-]
-
-    //Pour User2
-let stampsData2: [Stamp] = [
-
-    Stamp(
-        title: "Nombre d’entrées",
-        questDescription: "Nombre d’entrées totales enregistrées dans l’application. Parce qu’il fait bon de se sentir comme chez soi...",
-        progress: 22,
-        total: 50,
-        level: 2
-    ),
-
-    Stamp(
-        title: "Entrées musicales",
-        questDescription: "...",
-        progress: 4,
-        total: 20,
-        level: 2
-    ),
-
-    Stamp(
-        title: "Challenges complétés",
-        questDescription: "...",
-        progress: 3,
-        total: 5,
-        level: 3
+        total: 5
     )
 ]

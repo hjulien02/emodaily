@@ -17,15 +17,24 @@ struct User: Identifiable {
     let email: String // unique
     
     // (pour profil)
-    let image: String?
+    let image: String
     let age: Int // >= 15
     
     // (pour données relatives à son journal, ses quêtes et ses stats)
-    let entries: [Entry]?
-    let challenges: [Challenge]?
-    let stamps: [Stamp]?
+    let entries: [Entry]
+    let quests: [Quest]
+    //  let challenges: [Challenge]?
+    //  let stamps: [Stamp]?
     
-    // (init si classe)
+    init(username: String, password: String, email: String, image: String, age: Int, entries: [Entry] = [], quests: [Quest] = []) {
+        self.username = username
+        self.password = password
+        self.email = email
+        self.image = image
+        self.age = age
+        self.entries = entries
+        self.quests = quests
+    }
 }
 
 // modèle de l'entrée d'un User
@@ -150,4 +159,5 @@ class Stamp: Quest, Identifiable {
         
         super.init(title: title, questDescription: questDescription, progress: progress, total: total)
     }
+
 }
