@@ -26,6 +26,7 @@ struct User: Identifiable {
     //  let challenges: [Challenge]?
     //  let stamps: [Stamp]?
     
+    
     init(username: String, password: String, email: String, image: String, age: Int, entries: [Entry] = [], quests: [Quest] = []) {
         self.username = username
         self.password = password
