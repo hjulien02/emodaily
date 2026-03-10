@@ -10,8 +10,7 @@ import SwiftUI
 struct HealthSlider: View {
     
     var message: String
-    var 
-    
+
     var body: some View {
         VStack{
             Text("")
@@ -25,5 +24,5 @@ struct HealthSlider: View {
 }
 
 #Preview {
-    HealthSlider()
+    HealthSlider(message: "hi")
 }
