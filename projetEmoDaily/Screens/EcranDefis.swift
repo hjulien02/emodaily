@@ -9,7 +9,16 @@ import SwiftUI
 
 struct EcranDefis: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Color.background.ignoresSafeArea()
+            VStack {
+                Title(title: "Quêtes")
+                QuestMenu(questTitle: "Défis", questDescription: "Mettez-vous au défi, seul ou à plusieurs!", questImage: "challengesMenu")
+                    .padding()
+                QuestMenu(questTitle: "Tampons", questDescription: "Consultez vos accomplisements!", questImage: "stampsMenu")
+                    .padding()
+            }
+        }
     }
 }
 
