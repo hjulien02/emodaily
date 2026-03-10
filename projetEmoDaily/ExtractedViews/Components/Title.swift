@@ -12,7 +12,6 @@ struct Title: View {
     
     var body: some View {
         Text(title)
-            .padding()
             .font(.custom("Noteworthy", size: 32))
             .bold()
             .frame(maxWidth: .infinity, alignment: .leading)
