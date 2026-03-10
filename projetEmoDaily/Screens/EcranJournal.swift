@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EcranJournal: View {
     var body: some View {
-        Text("Test")
+        Text("Test ")
     }
 }
 
