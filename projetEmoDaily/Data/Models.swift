@@ -6,6 +6,19 @@
 //
 
 import Foundation
+import Observation
+
+/*
+struct UsersResponse: Codable {
+    let records: [UserRecord]
+}
+
+struct UserRecord: Codable, Identifiable {
+    let id: String
+    let createdTime: Date
+    let fields: User
+}
+*/
 
 // modèle de l'utilisateur
 struct User: Identifiable {
@@ -23,10 +36,17 @@ struct User: Identifiable {
     // (pour données relatives à son journal, ses quêtes et ses stats)
     let entries: [Entry]
     let quests: [Quest]
-    //  let challenges: [Challenge]?
-    //  let stamps: [Stamp]?
     
-    
+    private enum CodingKeys: String, CodingKey {
+        case username
+        case password
+        case email
+        case image
+        case age
+        case entries
+        case quests
+    }
+
     init(username: String, password: String, email: String, image: String, age: Int, entries: [Entry] = [], quests: [Quest] = []) {
         self.username = username
         self.password = password
@@ -38,13 +58,26 @@ struct User: Identifiable {
     }
 }
 
-// modèle de l'entrée d'un User
-struct Entry: Identifiable {
-    let id = UUID()
+/*
+struct EntriesResponse: Codable {
+    let records: [EntryRecord]
+}
+
+struct EntryRecord: Codable, Identifiable {
+    let id: String
+    let createdTime: Date
+    let fields: Entry
+}
+ */
+
+// modèle de l'entrée d'un User`
+@Observable
+class Entry: Identifiable {
+    var id = UUID()
     
     // (obligatoire dans l'entrée)
-    let date: Date
-    let emotion: Emotion
+    var date: Date
+    var emotion: Emotion
     
     // (optionnels dans l'entrée)
     let notes: String?
@@ -62,12 +95,35 @@ struct Entry: Identifiable {
     let energy: EnergyLevel
     let appetite: AppetiteLevel
     let sleep: SleepLevel
+    
+    private enum CodingKeys: String, CodingKey {
+        case date = "Date"
+        case emotion = "Emotion"
+        case notes = "Notes"
+        case image = "Image"
+        case anxiety = "AnxietyLevel"
+        case energy = "EnergyLevel"
+        case appetite = "AppetiteLevel"
+        case sleep = "SleepLevel"
+    }
 
-    // (init si classe)
+    init(id: UUID = UUID(), date: Date, emotion: Emotion, notes: String?, image: String? = "default", anxiety: AnxietyLevel, energy: EnergyLevel, appetite: AppetiteLevel, sleep: SleepLevel) {
+        self.id = id
+        self.date = date
+        self.emotion = emotion
+        self.notes = notes
+        self.image = image
+        self.anxiety = anxiety
+        self.energy = energy
+        self.appetite = appetite
+        self.sleep = sleep
+    }
 }
 
 // enums pour l'entrée d'un User
-enum Emotion: String, CaseIterable {
+enum Emotion: String, CaseIterable, Identifiable, Codable {
+    var id: RawValue { rawValue }
+    
     case anger = "colère"
     case boredom = "ennui"
     case happiness = "joie"
@@ -78,40 +134,127 @@ enum Emotion: String, CaseIterable {
     case sad = "triste"
     case sorrow = "chagrin"
     case sick = "malade"
+    
+    func getEmoji() -> String {
+        switch self {
+        case .anger:
+            "😤"
+        case .boredom:
+            "😑"
+        case .happiness:
+            "😃"
+        case .depressive:
+            "🫩"
+        case .tired:
+            "😴"
+        case .boss:
+            "😎"
+        case .good:
+            "🙂"
+        case .sad:
+            "😥"
+        case .sorrow:
+            "😞"
+        case .sick:
+            "🤒"
+        }
+    }
 }
 
-enum AnxietyLevel: String, CaseIterable {
+enum AnxietyLevel: String, CaseIterable, Identifiable, Codable {
+    var id: RawValue { rawValue }
+    
     case verylow = "tout roule"
     case low = "ça va"
     case neutral = "pas vraiment"
     case high = "anxieux.se"
     case veryhigh = "beaucoup"
+    
+    func getSymbol() -> String {
+        switch self {
+        case .verylow:
+            "sun.max.fill"
+        case .low:
+            "cloud.sun.fill"
+        case .neutral:
+            "cloud.fill"
+        case .high:
+            "cloud.rain.fill"
+        case .veryhigh:
+            "cloud.bolt.rain.fill"
+        }
+    }
 }
 
-enum EnergyLevel: String, CaseIterable {
+enum EnergyLevel: String, CaseIterable, Identifiable, Codable {
+    var id: RawValue { rawValue }
+    
     case verylow = "vidé.e"
     case low = "fatigué.e"
     case neutral = "normal"
     case high = "bien"
     case veryhigh = "chargé.e à bloc"
+    
+    func getSymbol() -> String {
+        switch self {
+        case .verylow:
+            "battery.0percent"
+        case .low:
+            "battery.25percent"
+        case .neutral:
+            "battery.50percent"
+        case .high:
+            "battery.75percent"
+        case .veryhigh:
+            "battery.100percent"
+        }
+    }
 }
 
-enum AppetiteLevel: String, CaseIterable {
+enum AppetiteLevel: String, CaseIterable, Identifiable, Codable {
+    var id: RawValue { rawValue }
+    
     case low = "absolument pas"
     case neutral = "un peu"
     case high = "beaucoup"
+    
+    func getSymbol() -> String {
+        switch self {
+        case .low:
+            "circle"
+        case .neutral:
+            "circle.lefthalf.filled"
+        case .high:
+            "circle.fill"
+        }
+    }
 }
 
-enum SleepLevel: String, CaseIterable {
+enum SleepLevel: String, CaseIterable, Codable {
+    var id: RawValue { rawValue }
+    
     case allnighter = "nuit blanche"
     case insomnia = "insomnie"
     case sleep = "sommeil léger"
     case goodsleep = "nuit complète"
+    
+    func getSymbol() -> String {
+        switch self {
+        case .allnighter:
+            "eye.fill"
+        case .insomnia:
+            "eye.half.closed.fill"
+        case .sleep:
+            "bed.double.fill"
+        case .goodsleep:
+            "moon.zzz.fill"
+        }
+    }
 }
 
 // modèle des différentes quêtes d'un User
-class Quest {
-    let id = UUID()
+class Quest: Identifiable, Codable {
+    var id = UUID()
     
     var title: String
     var questDescription: String
@@ -126,39 +269,42 @@ class Quest {
     }
 }
 
+/*
 // modèle des quêtes de type Challenge
-class Challenge: Quest, Identifiable {
-    var challengeType: ChallengeType
-    var image: String
-    var startDate: Date?
-    var endDate: Date?
-    var isCompleted: Bool
-    
-    init(title: String, questDescription: String, progress: Int, total: Int, challengeType: ChallengeType, image: String, startDate: Date?, endDate: Date?, isCompleted: Bool) {
-        self.challengeType = challengeType
-        self.image = image
-        self.startDate = startDate
-        self.endDate = endDate
-        self.isCompleted = isCompleted
-        
-        super.init(title: title, questDescription: questDescription, progress: progress, total: total)
-    }
+class Challenge: Quest {
+     var challengeType: ChallengeType
+     var image: String
+     var startDate: Date?
+     var endDate: Date?
+     var isCompleted: Bool
+ 
+     init(title: String, questDescription: String, progress: Int, total: Int, challengeType: ChallengeType, image: String, startDate: Date?, endDate: Date?, isCompleted: Bool) {
+     self.challengeType = challengeType
+     self.image = image
+     self.startDate = startDate
+     self.endDate = endDate
+     self.isCompleted = isCompleted
+     
+     super.init(title: title, questDescription: questDescription, progress: progress, total: total)
+     }
 }
-
+ 
 // enum des différentes catégories de Challenge
-enum ChallengeType: String {
+enum ChallengeType: String, Codable {
+    var id: RawValue { rawValue }
     case solo = "Individuel"
     case multi = "Collectif"
 }
 
 // modèle des quêtes de type Stamp
-class Stamp: Quest, Identifiable {
+class Stamp: Quest {
     var level: Int // 0-5
-    
-    init(title: String, questDescription: String, progress: Int, total: Int, level: Int) {
-        self.level = level
-        
-        super.init(title: title, questDescription: questDescription, progress: progress, total: total)
-    }
 
+    init(title: String, questDescription: String, progress: Int, total: Int, level: Int) {
+    self.level = level
+ 
+    super.init(title: title, questDescription: questDescription, progress: progress, total: total)
+    }
+ 
 }
+*/
