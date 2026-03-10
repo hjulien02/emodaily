@@ -83,9 +83,6 @@ struct EcranNouvelleEntree: View {
                             
                             VStack(spacing: 22){
                                 HealthSlider()
-                                HealthSlider()
-                                HealthSlider()
-                                HealthSlider()
                             }
 
                         } //SECTION SANTE

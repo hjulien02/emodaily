@@ -23,20 +23,20 @@ struct UserRecord: Codable, Identifiable {
 // modèle de l'utilisateur
 struct User: Identifiable {
     let id = UUID()
-    
+
     // (pour création d'un compte)
-    let username: String // unique
+    let username: String  // unique
     let password: String
-    let email: String // unique
-    
+    let email: String  // unique
+
     // (pour profil)
     let image: String
-    let age: Int // >= 15
-    
+    let age: Int  // >= 15
+
     // (pour données relatives à son journal, ses quêtes et ses stats)
     let entries: [Entry]
     let quests: [Quest]
-    
+
     private enum CodingKeys: String, CodingKey {
         case username
         case password
@@ -47,7 +47,15 @@ struct User: Identifiable {
         case quests
     }
 
-    init(username: String, password: String, email: String, image: String, age: Int, entries: [Entry] = [], quests: [Quest] = []) {
+    init(
+        username: String,
+        password: String,
+        email: String,
+        image: String,
+        age: Int,
+        entries: [Entry] = [],
+        quests: [Quest] = []
+    ) {
         self.username = username
         self.password = password
         self.email = email
@@ -58,79 +66,83 @@ struct User: Identifiable {
     }
 }
 
-// modèle de l'entrée d'un User
+/*
+  struct EntriesResponse: Codable {
+  let records: [EntryRecord]
+  }
+
+  struct EntryRecord: Codable, Identifiable {
+  let id: String
+  let createdTime: Date
+  let fields: Entry
+  }
+  */
+
+// modèle de l'entrée d'un User`
 @Observable
 class Entry: Identifiable {
-    let id = UUID()
-    
-    /*
-     struct EntriesResponse: Codable {
-     let records: [EntryRecord]
-     }
-     
-     struct EntryRecord: Codable, Identifiable {
-     let id: String
-     let createdTime: Date
-     let fields: Entry
-     }
+    var id = UUID()
+
+    // (obligatoire dans l'entrée)
+    var date: Date
+    var emotion: Emotion
+
+    // (optionnels dans l'entrée)
+    let notes: String?
+    let image: String?
+
+    /* (en standby, possiblement trop compliqué?)
+     let record: AVAudioRecorder?
+     let draw: UIImage? // NSImage? dérivé de la struct "PKDrawing"
+     let music: //API MusicKit ou AppleMusic avec AppleDeveloper key
+     let gif: String? // URL du GIF ou API Giphy
      */
-    
-    // modèle de l'entrée d'un User`
-    @Observable
-    class Entry: Identifiable {
-        var id = UUID()
-        
-        // (obligatoire dans l'entrée)
-        var date: Date
-        var emotion: Emotion
-        
-        // (optionnels dans l'entrée)
-        let notes: String?
-        let image: String?
-        
-        /* (en standby, possiblement trop compliqué?)
-         let record: AVAudioRecorder?
-         let draw: UIImage? // NSImage? dérivé de la struct "PKDrawing"
-         let music: //API MusicKit ou AppleMusic avec AppleDeveloper key
-         let gif: String? // URL du GIF ou API Giphy
-         */
-        
-        // (pour niveaux des jauges de santé)
-        let anxiety: AnxietyLevel
-        let energy: EnergyLevel
-        let appetite: AppetiteLevel
-        let sleep: SleepLevel
-        
-        private enum CodingKeys: String, CodingKey {
-            case date = "Date"
-            case emotion = "Emotion"
-            case notes = "Notes"
-            case image = "Image"
-            case anxiety = "AnxietyLevel"
-            case energy = "EnergyLevel"
-            case appetite = "AppetiteLevel"
-            case sleep = "SleepLevel"
-        }
-        
-        init(id: UUID = UUID(), date: Date, emotion: Emotion, notes: String?, image: String? = "default", anxiety: AnxietyLevel, energy: EnergyLevel, appetite: AppetiteLevel, sleep: SleepLevel) {
-            self.id = id
-            
-            self.date = date
-            self.emotion = emotion
-            self.notes = notes
-            self.image = image
-            self.anxiety = anxiety
-            self.energy = energy
-            self.appetite = appetite
-            self.sleep = sleep
-        }
+
+    // (pour niveaux des jauges de santé)
+    let anxiety: AnxietyLevel
+    let energy: EnergyLevel
+    let appetite: AppetiteLevel
+    let sleep: SleepLevel
+
+    private enum CodingKeys: String, CodingKey {
+        case date = "Date"
+        case emotion = "Emotion"
+        case notes = "Notes"
+        case image = "Image"
+        case anxiety = "AnxietyLevel"
+        case energy = "EnergyLevel"
+        case appetite = "AppetiteLevel"
+        case sleep = "SleepLevel"
+    }
+
+    init(
+        id: UUID = UUID(),
+        date: Date,
+        emotion: Emotion,
+        notes: String?,
+        image: String? = "default",
+        anxiety: AnxietyLevel,
+        energy: EnergyLevel,
+        appetite: AppetiteLevel,
+        sleep: SleepLevel
+    ) {
+        self.id = id
+
+        self.date = date
+        self.emotion = emotion
+        self.notes = notes
+        self.image = image
+        self.anxiety = anxiety
+        self.energy = energy
+        self.appetite = appetite
+        self.sleep = sleep
     }
 }
 
 // enums pour l'entrée d'un User
 enum Emotion: String, CaseIterable, Identifiable, Codable {
     var id: RawValue { rawValue }
-    
+
     case anger = "colère"
     case boredom = "ennui"
     case happiness = "joie"
@@ -141,7 +153,7 @@ enum Emotion: String, CaseIterable, Identifiable, Codable {
     case sad = "triste"
     case sorrow = "chagrin"
     case sick = "malade"
-    
+
     func getEmoji() -> String {
         switch self {
         case .anger:
@@ -170,13 +182,13 @@ enum Emotion: String, CaseIterable, Identifiable, Codable {
 
 enum AnxietyLevel: String, CaseIterable, Identifiable, Codable {
     var id: RawValue { rawValue }
-    
+
     case verylow = "tout roule"
     case low = "ça va"
     case neutral = "pas vraiment"
     case high = "anxieux.se"
     case veryhigh = "beaucoup"
-    
+
     func getSymbol() -> String {
         switch self {
         case .verylow:
@@ -195,13 +207,13 @@ enum AnxietyLevel: String, CaseIterable, Identifiable, Codable {
 
 enum EnergyLevel: String, CaseIterable, Identifiable, Codable {
     var id: RawValue { rawValue }
-    
+
     case verylow = "vidé.e"
     case low = "fatigué.e"
     case neutral = "normal"
     case high = "bien"
     case veryhigh = "chargé.e à bloc"
-    
+
     func getSymbol() -> String {
         switch self {
         case .verylow:
@@ -220,11 +232,11 @@ enum EnergyLevel: String, CaseIterable, Identifiable, Codable {
 
 enum AppetiteLevel: String, CaseIterable, Identifiable, Codable {
     var id: RawValue { rawValue }
-    
+
     case low = "absolument pas"
     case neutral = "un peu"
     case high = "beaucoup"
-    
+
     func getSymbol() -> String {
         switch self {
         case .low:
@@ -239,12 +251,12 @@ enum AppetiteLevel: String, CaseIterable, Identifiable, Codable {
 
 enum SleepLevel: String, CaseIterable, Codable {
     var id: RawValue { rawValue }
-    
+
     case allnighter = "nuit blanche"
     case insomnia = "insomnie"
     case sleep = "sommeil léger"
     case goodsleep = "nuit complète"
-    
+
     func getSymbol() -> String {
         switch self {
         case .allnighter:
@@ -262,12 +274,12 @@ enum SleepLevel: String, CaseIterable, Codable {
 // modèle des différentes quêtes d'un User
 class Quest: Identifiable, Codable {
     var id = UUID()
-    
+
     var title: String
     var questDescription: String
     var progress: Int
     var total: Int
-    
+
     init(title: String, questDescription: String, progress: Int, total: Int) {
         self.title = title
         self.questDescription = questDescription
@@ -284,18 +296,18 @@ class Challenge: Quest {
      var startDate: Date?
      var endDate: Date?
      var isCompleted: Bool
- 
+
      init(title: String, questDescription: String, progress: Int, total: Int, challengeType: ChallengeType, image: String, startDate: Date?, endDate: Date?, isCompleted: Bool) {
      self.challengeType = challengeType
      self.image = image
      self.startDate = startDate
      self.endDate = endDate
      self.isCompleted = isCompleted
-     
+
      super.init(title: title, questDescription: questDescription, progress: progress, total: total)
      }
 }
- 
+
 // enum des différentes catégories de Challenge
 enum ChallengeType: String, Codable {
     var id: RawValue { rawValue }
@@ -309,9 +321,9 @@ class Stamp: Quest {
 
     init(title: String, questDescription: String, progress: Int, total: Int, level: Int) {
     self.level = level
- 
+
     super.init(title: title, questDescription: questDescription, progress: progress, total: total)
     }
- 
+
 }
 */
