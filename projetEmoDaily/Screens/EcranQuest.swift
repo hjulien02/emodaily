@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EcranDefis: View {
+struct EcranQuest: View {
     var body: some View {
         ZStack {
             Color.background.ignoresSafeArea()
@@ -23,5 +23,5 @@ struct EcranDefis: View {
 }
 
 #Preview {
-    EcranDefis()
+    EcranQuest()
 }
