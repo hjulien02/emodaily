@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Observation
 
 // modèle de l'utilisateur
 struct User: Identifiable {
@@ -39,12 +40,13 @@ struct User: Identifiable {
 }
 
 // modèle de l'entrée d'un User
-struct Entry: Identifiable {
+@Observable
+class Entry: Identifiable {
     let id = UUID()
     
     // (obligatoire dans l'entrée)
-    let date: Date
-    let emotion: Emotion
+    var date: Date
+    var emotion: Emotion
     
     // (optionnels dans l'entrée)
     let notes: String?
@@ -63,11 +65,22 @@ struct Entry: Identifiable {
     let appetite: AppetiteLevel
     let sleep: SleepLevel
 
-    // (init si classe)
+    init(date: Date, emotion: Emotion, notes: String?, image: String?, anxiety: AnxietyLevel, energy: EnergyLevel, appetite: AppetiteLevel, sleep: SleepLevel) {
+        self.date = date
+        self.emotion = emotion
+        self.notes = notes
+        self.image = image
+        self.anxiety = anxiety
+        self.energy = energy
+        self.appetite = appetite
+        self.sleep = sleep
+    }
 }
 
 // enums pour l'entrée d'un User
-enum Emotion: String, CaseIterable {
+enum Emotion: String, CaseIterable, Identifiable {
+    var id: RawValue { rawValue }
+    
     case anger = "colère"
     case boredom = "ennui"
     case happiness = "joie"
