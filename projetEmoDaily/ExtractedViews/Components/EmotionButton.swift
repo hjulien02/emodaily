@@ -18,19 +18,13 @@ struct EmotionButton: View {
                 entry.emotion = emotion
         }label: {
             VStack{
-                Image(emoji)
-                    .resizable()
-                    .scaledToFit()
+                Text(emoji)
                     .frame(minWidth: 24, minHeight: 24)
             }
             .padding(8)
-            .background(entry.emotion == emotion ? Color.blue :  Color.blue.opacity(0.1))
-            .cornerRadius(20)
-            .foregroundStyle(entry.emotion == emotion ? Color.white :  Color.blue)
-            .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.accentColor.opacity(0.1), lineWidth: 1)
-                )
+            .background(Circle()
+                .fill(entry.emotion == emotion ? .green2 : .background.opacity(0.2))
+                .overlay(entry.emotion == emotion ? Circle().stroke(.green3.opacity(0.4), lineWidth: 2): Circle().stroke(Color.background.opacity(0.4), lineWidth: 1) ))
         }
 
     }

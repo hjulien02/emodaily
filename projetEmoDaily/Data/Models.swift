@@ -88,7 +88,7 @@ class Entry: Identifiable {
     var emotion: Emotion
 
     // (optionnels dans l'entrée)
-    let notes: String?
+    var notes: String?
     let image: String?
 
     /* (en standby, possiblement trop compliqué?)
@@ -99,10 +99,10 @@ class Entry: Identifiable {
      */
 
     // (pour niveaux des jauges de santé)
-    let anxiety: AnxietyLevel
-    let energy: EnergyLevel
-    let appetite: AppetiteLevel
-    let sleep: SleepLevel
+    var anxiety: AnxietyLevel
+    var energy: EnergyLevel
+    var appetite: AppetiteLevel
+    var sleep: SleepLevel
 
     private enum CodingKeys: String, CodingKey {
         case date = "Date"

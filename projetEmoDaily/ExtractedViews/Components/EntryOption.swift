@@ -22,9 +22,9 @@ struct EntryOption: View {
             
             Text(optionTitle)
         }
-        
         .frame(minWidth: 100, minHeight: 100)
-        .background(RoundedRectangle(cornerRadius: 20).fill(.blue).opacity(0.2))
+        .background(RoundedRectangle(cornerRadius: 20).fill(.green4).stroke(.green15.opacity(0.4), lineWidth: 2))
+        .foregroundStyle(Color.white)
     }
 }
 
