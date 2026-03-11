@@ -1,0 +1,45 @@
+//
+//  EntriesViewModel.swift
+//  projetEmoDaily
+//
+//  Created by Apprenent 151 on 10/03/2026.
+//
+
+import Foundation
+import Observation
+
+@Observable @MainActor
+class EntriesViewModel {
+    // initialisation clé API + URL AirTable
+    private let apiKey: String = "apiKey123"
+    private let baseURL = URL(string: "https://api.airtable.com/v0/appwe8Hf6wrPvRIR1/Entry")!
+    var entries: [Entry] = []
+    
+    func fetchEntryByID(id: String) async throws -> Entry {
+        let newURL = URL(string: "https://api.airtable.com/v0/appwe8Hf6wrPvRIR1/Entry/\(id)")!
+        
+        // requête
+        var request = URLRequest(url: newURL)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            // récupère et stocke les données
+            let (data, _) = try await URLSession.shared.data(for: request)
+            
+            // décodage JSON
+            let decoder = JSONDecoder()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+
+            decoder.dateDecodingStrategy = .formatted(formatter)
+            
+            let decoded = try decoder.decode(EntryRecord.self, from: data)
+            return decoded.fields
+        } catch {
+            print("Échec du décodage: \(error)")
+            throw error
+        }
+    }
+}
