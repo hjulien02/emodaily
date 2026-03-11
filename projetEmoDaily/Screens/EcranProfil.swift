@@ -1,3 +1,11 @@
+//
+//  EcranProfil.swift
+//  projetEmoDaily
+//
+//  Created by ThomasJ on 10/03/2026.
+//
+
+
 import SwiftUI
 
 struct EcranProfil: View {
@@ -10,24 +18,21 @@ struct EcranProfil: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         Spacer()
-                        Spacer()
+                        HStack {
+                            Title(title: "Profil")                    }
+                        
 
                         HStack(spacing: 16) {
                             ZStack(alignment: .topTrailing) {
-                                ZStack {
-                                    Circle()
-                                        .fill(Color(white: 0.82))
-                                        .frame(width: 70, height: 70)
-                                    Image(systemName: "person.fill")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 38, height: 38)
-                                        .foregroundStyle(Color(white: 0.55))
-                                }
+                                Image("default")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 70, height: 70)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                                 Image(systemName: "square.and.pencil")
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundStyle(.black)
-                                    .offset(x: 4, y: -4)
+                                    .offset(x: -1, y: -1)
                             }
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Profil")
@@ -111,7 +116,7 @@ struct EcranProfil: View {
                                 .bold()
                         }
                     }
-                    .padding(.horizontal, 20)
+                    .padding(.horizontal, 25)
                     .padding(.top, 8)
                     .padding(.bottom, 32)
                 }
