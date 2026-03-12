@@ -13,6 +13,23 @@ struct EcranDefis: View {
     @State var vmQuest = QuestsViewModel()
     @State var vmUser = UsersViewModel()
     @State var challenges = [Challenge]()
+    
+    func filterChallenges() -> [Challenge] {
+        switch selectedPeriod {
+        case "Collectif":
+            return challenges.filter { challenge in
+                challenge.challengeType == .multi
+            }
+        case "Mes défis":
+            return challenges.filter { challenge in
+                challenge.progress > 0
+            }
+        default:
+            return challenges.filter { challenge in
+                challenge.challengeType == .solo
+            }
+        }
+    }
 
     var body: some View {
         ZStack {
@@ -29,16 +46,8 @@ struct EcranDefis: View {
                 }
 
                 ScrollView {
-                    ForEach(challenges) { challenge in
-                        Defi(
-                            title: challenge.title,
-                            description: challenge.questDescription,
-                            emoji: challenge.image,
-                            startDate: challenge.startDate,
-                            endDate: challenge.endDate,
-                            progress: challenge.progress,
-                            total: challenge.total
-                        )
+                    ForEach(filterChallenges()) { challenge in
+                        Defi(challenge: challenge)
                     }
                 }
             }

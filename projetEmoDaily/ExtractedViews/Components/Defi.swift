@@ -8,17 +8,11 @@
 import SwiftUI
 
 struct Defi: View {
-    let title: String
-    let description: String
-    let emoji: String
-    let startDate: Date?
-    let endDate: Date?
-    let progress: Int
-    let total: Int // >0
+    let challenge: Challenge
     
     let barWidth: CGFloat = 150
     var progressBar: CGFloat {
-        CGFloat(progress) / CGFloat(total)
+        CGFloat(challenge.progress) / CGFloat(challenge.total)
     }
     var ratio: CGFloat {
         min(progressBar, 1)
@@ -29,14 +23,14 @@ struct Defi: View {
             // 1/2
             HStack {
                 VStack (spacing: 10) {
-                    Text(title)
+                    Text(challenge.title)
                         .font(.title2)
                         .bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(description)
+                    Text(challenge.questDescription)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                Text(emoji)
+                Text(challenge.image)
                     .font(.system(size: 64))
                     .frame(maxWidth: 96)
             }
@@ -56,7 +50,7 @@ struct Defi: View {
                         .frame(width: 150 * ratio, height: 14)
                         .foregroundStyle(Color.green4)
                 }
-                Text("\(progress)/\(total)")
+                Text("\(challenge.progress)/\(challenge.total)")
                     .bold()
                     .frame(maxWidth: 60)
             }
@@ -65,11 +59,11 @@ struct Defi: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity)
-        .background(Color.green15)
+        .background(challenge.challengeType == .solo ? Color.green15 : .pink.opacity(0.3))
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 }
 
 #Preview {
-    Defi(title: "Streak 5 Jours", description: "Enregistrez 5 entrées consécutives!", emoji: "🔥", startDate: nil, endDate: nil, progress: 0, total: 5)
+    Defi(challenge: Challenge(id: "1", title: "Streak 5 Jours", questDescription: "Enregistrez 5 entrées consécutives!", progress: 0, total: 5, questType: "challenge", challengeType: .multi, image: "🔥", isCompleted: false))
 }
