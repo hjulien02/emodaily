@@ -147,23 +147,6 @@ struct EcranStats: View {
 }
 
 
-private struct MoodStat: View {
-    let couleur: Color
-    let pourcentage: String
-    let emoji: String
-
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-        HStack(spacing: 8) {
-            RoundedRectangle(cornerRadius: 4)
-                .fill(couleur)
-                .frame(width: 22, height: 22)
-            Text(pourcentage)
-                .font(.subheadline.weight(.semibold))
-            Text(emoji)
-        }
-    }
-}
 
 
 #Preview {
