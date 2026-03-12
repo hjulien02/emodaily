@@ -80,7 +80,7 @@ class Entry: Identifiable, Codable {
 
     // (optionnels dans l'entrée)
     let notes: String?
-    //    let image: String?
+    let image: [Attachment]?
 
     /* (en standby, possiblement trop compliqué?)
     let record: AVAudioRecorder?
@@ -99,7 +99,7 @@ class Entry: Identifiable, Codable {
         case date = "Date"
         case emotion = "Emotion"
         case notes = "Notes"
-        //        case image = "Image"
+        case image = "Image"
         case anxiety = "AnxietyLevel"
         case energy = "EnergyLevel"
         case appetite = "AppetiteLevel"
@@ -111,6 +111,7 @@ class Entry: Identifiable, Codable {
         date: Date,
         emotion: Emotion,
         notes: String?,
+        image: [Attachment]? = [],
         anxiety: AnxietyLevel,
         energy: EnergyLevel,
         appetite: AppetiteLevel,
@@ -120,12 +121,35 @@ class Entry: Identifiable, Codable {
         self.date = date
         self.emotion = emotion
         self.notes = notes
-        //        self.image = image
+        self.image = image
         self.anxiety = anxiety
         self.energy = energy
         self.appetite = appetite
         self.sleep = sleep
     }
+}
+
+struct Attachment: Codable {
+    let id: String
+    let width: Int?
+    let height: Int?
+    let url: URL
+    let filename: String?
+    let size: Int?
+    let type: String?
+    let thumbnails: Thumbnails?
+}
+
+struct Thumbnails: Codable {
+    let small: ThumbnailVariant?
+    let large: ThumbnailVariant?
+    let full: ThumbnailVariant?
+}
+
+struct ThumbnailVariant: Codable {
+    let url: URL
+    let width: Int?
+    let height: Int?
 }
 
 // enums pour l'entrée d'un User
