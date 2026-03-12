@@ -8,29 +8,62 @@
 import SwiftUI
 
 struct EcranDefis: View {
-    @State var isSelected = false
-    
+    @State var selectedPeriod = "Individuel"
+    @State var defisType = ["Individuel", "Collectif", "Mes défis"]
+    @State var vmQuest = QuestsViewModel()
+    @State var vmUser = UsersViewModel()
+    @State var challenges = [Challenge]()
+
     var body: some View {
         ZStack {
             Color.bg.ignoresSafeArea()
-            VStack (spacing: 20) {
+            VStack(spacing: 20) {
                 Title(title: "Défis")
-                ScrollView(.horizontal) {
-                    Button {
-                        isSelected.toggle()
-                    } label: {
-                        Text("Individuel")
+                HStack {
+                    ForEach(defisType, id: \.self) { type in
+                        PickerButton(
+                            text: type,
+                            selectedPicker: $selectedPeriod
+                        )
                     }
-                    .background(isSelected ? Color.green1 : Color.bg)
-                }.padding()
-                
-                Defi(title: "Streak 5 Jours", description: "Enregistrez 5 entrées consécutives!", emoji: "🔥", startDate: nil, endDate: nil, progress: 0, total: 5)
-                
-                Defi(title: "15 entrées (Mars)", description: "Enregistrez 15 entrées en mars!", emoji: "📝", startDate: nil, endDate: nil, progress: 10, total: 15)
-                
-                Defi(title: "Artiste dans l'âme", description: "Dessinez sur 10 entrées consécutives!", emoji: "🎨", startDate: nil, endDate: nil, progress: 0, total: 10)
+                }
+
+                ScrollView {
+                    ForEach(challenges) { challenge in
+                        Defi(
+                            title: challenge.title,
+                            description: challenge.questDescription,
+                            emoji: challenge.image,
+                            startDate: challenge.startDate,
+                            endDate: challenge.endDate,
+                            progress: challenge.progress,
+                            total: challenge.total
+                        )
+                    }
+                }
             }
             .padding()
+            .task {
+                do {
+                    try await vmUser.fetchUsers()
+                } catch {
+                    print(error)
+                }
+                if let quests = vmUser.connectedUser.quests {
+                    var result = [Quest]()
+                    for questId in quests {
+                        do {
+                            let quest = try await vmQuest.fetchQuestByID(
+                                id: questId
+                            )
+                            result.append(quest)
+                        } catch {
+                            print(error)
+                        }
+                    }
+                    challenges = result.compactMap { $0 as? Challenge }
+                }
+            }
         }
     }
 }
