@@ -8,8 +8,47 @@
 import SwiftUI
 
 struct EcranJournal: View {
+
+    @State var selectedPeriod = "Mois"
+    @State var period = ["Semaine", "Mois", "Année"]
+
     var body: some View {
-        Text("Test ")
+
+        NavigationStack {
+            ZStack {
+
+                Color.bg.ignoresSafeArea()
+
+                VStack {
+                    Title(title: "Journal")
+
+                    //Affichage des periodes
+                    HStack {
+                        ForEach(period, id: \.self) { onePeriod in
+                            PickerButton(
+                                text: onePeriod,
+                                selectedPicker: $selectedPeriod
+                            )
+                        }
+                    }
+                    
+                    Spacer()
+                    //EcranJournalMois()
+                    Spacer()
+
+                    //Ajout d'une entrée
+                    NavigationLink("+", destination: EcranNouvelleEntree())
+                        .foregroundStyle(.white)
+                        .bold()
+                        .frame(width: 64, height: 64)
+                        .background(.green4)
+                        .clipShape(Circle())
+                        .shadow(color: .white, radius: 10)
+
+                }
+                .padding()
+            }
+        }
     }
 }
 
