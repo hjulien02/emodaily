@@ -9,67 +9,36 @@ import SwiftUI
 
 struct NoteView: View {
     var entry: Entry
-    
-    @State var note: String
-    
+
+    @State var note: String = ""
+
     var body: some View {
-        ZStack{
+        ZStack {
             Color.background
                 .ignoresSafeArea()
-            
-            VStack(spacing: 24){
-                VStack(spacing: 4){
-                    Image(systemName: "character.circle.fill")
-                        .font(.system(size: 32))
-                    
-                    Text("Note")
-                        .font(.custom("Noteworthy", size: 16))
-                        .bold()
-                }
-                //                    .offset(y: -24)
-                
-                VStack(alignment: .leading, spacing: 16){
-                    Text("Que se passe-t-il ?")
-                        .italic()
-                        .bold()
-                        .opacity(0.5)
-                    
-                    Text(note)
-                        .font(.system(size: 12))
-                    
-                    Spacer()
-                }
-                .padding(24)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .background(
-                    RoundedRectangle(cornerRadius: 20).fill(
-                        .green15
-                    )
-                    .stroke(.green4.opacity(0.1), lineWidth: 2)
-                )
-                
-                Button{
-                    entry.notes = note
-                }label: {
-                    ZStack{
-                        Circle()
-                            .fill(.green4)
-                            .stroke(.green15.opacity(0.4), lineWidth: 2)
-                            .frame(maxWidth: 64,maxHeight: 64)
-                        
-                        Image(systemName: "checkmark")
-                            .foregroundStyle(.white)
-                            .font(.system(size: 32))
-                    }
-                }
-                
+
+            EntryOptionView(
+                image: "character.circle.fill",
+                option: "Note"
+            ) {
+                Text("Que se passe-t-il ?")
+                    .italic()
+                    .bold()
+                    .opacity(0.5)
+
+                TextField("Ecris ici...", text: $note, axis: .vertical)
+                    .font(.system(size: 12))
+
+                Spacer()
+
+            } optionAction: {
+                entry.notes = note
             }
-            .padding(.horizontal, 24)
-            .foregroundStyle(.text)
+
         }
     }
 }
 
 #Preview {
-    NoteView(entry: entriesData[0], note: "aujourd'hui")
+    NoteView(entry: entriesData[0])
 }

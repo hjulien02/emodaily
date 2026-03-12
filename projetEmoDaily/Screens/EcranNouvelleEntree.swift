@@ -13,8 +13,8 @@ struct EcranNouvelleEntree: View {
     @State var date: Date
 
     var rows = [
-        GridItem(.adaptive(minimum: 24), spacing: 16),
-        GridItem(.adaptive(minimum: 24), spacing: 16),
+        GridItem(.flexible()),
+        GridItem(.flexible())
     ]
     var columns = [GridItem(.flexible()), GridItem(.flexible())]
 
@@ -51,7 +51,7 @@ struct EcranNouvelleEntree: View {
                 )!
                 let daysAfter = Calendar.current.date(
                     byAdding: .day,
-                    value: 7,
+                    value: 0,
                     to: Date.now
                 )!
 
@@ -92,20 +92,19 @@ struct EcranNouvelleEntree: View {
                             Text("Comment s’est passée ta journée ?")
 
                             VStack {
-                                LazyHGrid(rows: rows, spacing: 24) {
+                                LazyHGrid(rows: rows) {
                                     ForEach(Emotion.allCases) {
                                         thisEmotion in
 
                                         EmotionButton(
                                             entry: entry,
-                                            emotion: thisEmotion,
+                                            emotion: thisEmotion, emotionText: thisEmotion.rawValue,
                                             emoji: thisEmotion.getEmoji()
                                         )
                                     }
                                 }
                             }
                             .frame(maxWidth: .infinity)
-                            .padding()
                             .background(
                                 RoundedRectangle(cornerRadius: 20).fill(
                                     .green15
@@ -125,14 +124,23 @@ struct EcranNouvelleEntree: View {
                             }
 
                             LazyVGrid(columns: columns) {
-                                EntryOption(
-                                    icone: "character.circle.fill",
-                                    optionTitle: "note"
-                                )
-                                EntryOption(
-                                    icone: "photo.circle.fill",
-                                    optionTitle: "photo"
-                                )
+                                if entry.notes! == "" {
+                                    EntryOption(
+                                        icon: "character.circle.fill",
+                                        optionTitle: "note"
+                                    )
+                                } else {
+                                    FilledEntryOption(icon: "character.circle.fill", notes: entry.notes)
+                                }
+                                
+                                if entry.image! == "" {
+                                    EntryOption(
+                                        icon: "photo.circle.fill",
+                                        optionTitle: "photo"
+                                    )
+                                } else {
+                                    FilledEntryOption(icon: "photo.circle.fill", picture: entry.image)
+                                }
                             }
 
                         }  //SECTION OPTIONS
@@ -178,6 +186,8 @@ struct EcranNouvelleEntree: View {
 
                         // CTA
                         Button {
+                            entry.date = date
+                            
                             entry.anxiety = AnxietyLevel.allCases[anxietyIndex]
                             entry.energy = EnergyLevel.allCases[energyIndex]
                             entry.appetite =
@@ -200,6 +210,7 @@ struct EcranNouvelleEntree: View {
                 }
             }
         }
+        .foregroundStyle(.text)
     }
 }
 

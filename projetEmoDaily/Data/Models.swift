@@ -89,7 +89,7 @@ class Entry: Identifiable {
 
     // (optionnels dans l'entrée)
     var notes: String?
-    let image: String?
+    var image: String?
 
     /* (en standby, possiblement trop compliqué?)
      let record: AVAudioRecorder?
