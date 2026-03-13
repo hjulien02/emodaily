@@ -28,7 +28,7 @@ struct EntryOptionView<Content: View>: View {
                         .font(.custom("Noteworthy", size: 16))
                         .bold()
                 }
-                //                    .offset(y: -24)
+                .offset(y: 24)
 
                 VStack(alignment: .leading, spacing: 16) {
                     content()
@@ -46,11 +46,12 @@ struct EntryOptionView<Content: View>: View {
                                 .stroke(.green4.opacity(0.1), lineWidth: 2)
                         )
                 )
+                .offset(y: 24)
                 
                 Spacer()
                 
                 Button {
-
+                    optionAction()
                 } label: {
                     ZStack {
                         Circle()

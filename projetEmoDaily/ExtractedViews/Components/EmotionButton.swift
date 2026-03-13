@@ -21,7 +21,7 @@ struct EmotionButton: View {
             VStack(spacing: 2){
                 ZStack{
                     Circle()
-                        .fill(entry.emotion == emotion ? .green2 : .background.opacity(0.2))
+                        .fill(entry.emotion == emotion ? .green2 : Color.background.opacity(0.2))
                         .stroke(entry.emotion == emotion ? Color.green3.opacity(0.4) : Color.background.opacity(0.4), lineWidth: entry.emotion == emotion ? 2 : 1)
                         .frame(minWidth: 32, minHeight: 32)
 
@@ -31,6 +31,7 @@ struct EmotionButton: View {
                 
                 Text(emotionText)
                     .font(.system(size: 12))
+                    .foregroundStyle(entry.emotion == emotion ? .green4 : .text)
             }
             .padding(8)
         }

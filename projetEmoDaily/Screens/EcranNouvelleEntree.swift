@@ -17,6 +17,9 @@ struct EcranNouvelleEntree: View {
         GridItem(.flexible())
     ]
     var columns = [GridItem(.flexible()), GridItem(.flexible())]
+    
+    @State private var showingNotePopover = false
+    @State private var showingPicturePopover = false
 
     let anxietyValues = AnxietyLevel.allCases.map { $0.rawValue }
     let anxietyIcons = AnxietyLevel.allCases.map { $0.getSymbol() }
@@ -88,10 +91,9 @@ struct EcranNouvelleEntree: View {
                     VStack(alignment: .leading, spacing: 24) {
 
                         //SECTION EMOTION
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Comment s’est passée ta journée ?")
+                        EntrySection(title: "Comment s’est passée ta journée ?"){
 
-                            VStack {
+                            GreenContainer{
                                 LazyHGrid(rows: rows) {
                                     ForEach(Emotion.allCases) {
                                         thisEmotion in
@@ -104,36 +106,33 @@ struct EcranNouvelleEntree: View {
                                     }
                                 }
                             }
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                RoundedRectangle(cornerRadius: 20).fill(
-                                    .green15
-                                )
-                                .stroke(.green4.opacity(0.1), lineWidth: 2)
-                            )
-
                         }  //SECTION EMOTION
-                        .frame(maxWidth: .infinity)
+
 
                         //SECTION OPTIONS
-                        VStack(alignment: .leading, spacing: 12) {
-                            VStack(alignment: .leading) {
-                                Text("Quelque chose à raconter ?")
-                                Text("seulement si tu le veux...")
-                                    .font(.system(size: 12))
-                            }
+                        EntrySection(title: "Quelque chose à raconter ?", subtitle: "Seulement si tu le veux..."){
 
                             LazyVGrid(columns: columns) {
-                                if entry.notes! == "" {
-                                    EntryOption(
-                                        icon: "character.circle.fill",
-                                        optionTitle: "note"
-                                    )
-                                } else {
-                                    FilledEntryOption(icon: "character.circle.fill", notes: entry.notes)
+                                    Button{
+                                        showingNotePopover = true
+                                    }label: {
+                                    if entry.notes! == "" {
+                                        EntryOption(
+                                            icon: "character.circle.fill",
+                                            optionTitle: "note"
+                                        )
+                                    } else {
+                                        FilledEntryOption(icon: "character.circle.fill", notes: entry.notes)
+                                    }
                                 }
+                                .popover(isPresented: $showingNotePopover) {
+                                    NoteView(entry: entry, note: entry.notes!)
+                                    }
                                 
-                                if entry.image! == "" {
+                                Button{
+                                    showingPicturePopover = true
+                                }label: {
+                                    if entry.image! == "" {
                                     EntryOption(
                                         icon: "photo.circle.fill",
                                         optionTitle: "photo"
@@ -141,15 +140,18 @@ struct EcranNouvelleEntree: View {
                                 } else {
                                     FilledEntryOption(icon: "photo.circle.fill", picture: entry.image)
                                 }
+                                
+                            }
+                            .popover(isPresented: $showingPicturePopover) {
+                                PictureView(entry: entry)
+                                }
+                                
                             }
 
                         }  //SECTION OPTIONS
-                        .frame(maxWidth: .infinity)
 
                         //SECTION SANTE
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Et ta santé dans l’histoire ?")
-
+                        EntrySection(title: "Et ta santé dans l’histoire ?") {
                             VStack(spacing: 22) {
                                 HealthSlider(
                                     entry: entry,
@@ -182,7 +184,7 @@ struct EcranNouvelleEntree: View {
                             }
 
                         }  //SECTION SANTE
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(alignment: .leading)
 
                         // CTA
                         Button {
