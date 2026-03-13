@@ -15,7 +15,6 @@ struct CalendarData {
         frenchCalendar.locale = Locale(identifier: "fr_FR")
         return frenchCalendar
     }()
-
     
     ///////////////////////MOIS
 
@@ -42,7 +41,7 @@ struct CalendarData {
         let symbols = calendar.shortStandaloneWeekdaySymbols
         //Passe le dimanche en dernier
         return Array(symbols[1...6] + [symbols[0]])
-            //Enleve les points
+            //Enleve les points a chaque élément
             .map { $0.replacingOccurrences(of: ".", with: "").capitalized }
     }
 
@@ -50,6 +49,11 @@ struct CalendarData {
     static var todayWeekdayIndex: Int {
         let originalIndex = calendar.component(.weekday, from: Date()) - 1
         return (originalIndex + 6) % 7
+    }
+    
+    //Affiche le numéro de semaine
+    static func weekNumber(from date: Date) -> Int {
+        calendar.component(.weekOfYear, from: date)
     }
     
     //Creation d'un tableau de toutes les dates du mois
@@ -66,24 +70,29 @@ struct CalendarData {
         return dates
     }
     
-    //Affiche le numéro de semaine
-    static func weekNumber(from date: Date) -> Int {
-        calendar.component(.weekOfYear, from: date)
-    }
-    
     
     ///////////////////////SEMAINE ET MOIS
     
-    //Affiche le mois avec les nombres
+    //Affiche le mois en entier (avec les numéros)
     static func generatedMonthGrid(for displayedMonth: Date) -> [Date] {
-        guard
+        guard //si une des valeurs est nil la fonction renvoie un tableau vide
             let monthInterval = calendar.dateInterval(of: .month, for: displayedMonth),
-            let firstWeek = calendar.dateInterval(of: .weekOfMonth, for: monthInterval.start),
-            let lastWeek = calendar.dateInterval(of: .weekOfMonth, for: monthInterval.end - 1)
+            let firstWeek = calendar.dateInterval(of: .weekOfMonth, for: monthInterval.start)
         else {
             return []
         }
-        return betweenDates(start: firstWeek.start, end: lastWeek.end)
+        
+        //Dernier jour du mois
+        let lastDayOfMonth = calendar.date(byAdding: .day, value: -1, to: monthInterval.end)!
+        
+        // Trouve la derniere semaine du mois
+        let weekday = calendar.component(.weekday, from: lastDayOfMonth)
+        let daysToAdd = 8 - weekday
+        
+        //Dernier dimanche a affiché dans la grille
+        let lastSunday = calendar.date(byAdding: .day, value: daysToAdd, to: lastDayOfMonth)!
+        
+        return betweenDates(start: firstWeek.start, end: lastSunday)
     }
     
 }

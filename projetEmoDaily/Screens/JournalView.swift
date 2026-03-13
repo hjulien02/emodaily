@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct EcranJournal: View {
+struct JournalView: View {
 
-    @State var selectedPeriod = "Mois"
+    @State var selectedPeriod = "Semaine"
     @State var period = ["Semaine", "Mois", "Année"]
 
     var body: some View {
@@ -31,10 +31,18 @@ struct EcranJournal: View {
                             )
                         }
                     }
-                    
-                    Spacer()
-                    //EcranJournalMois()
-                    Spacer()
+                    .padding(.bottom, 10)
+
+                    //Affichage du calendrier (par semaine, mois ou année)
+                    ScrollView {
+                        if period[0].description == selectedPeriod {
+                            Text("Semaine")
+                        } else if period[1].description == selectedPeriod {
+                            JournalMonthView()
+                        } else {
+                            Text("Année")
+                        }
+                    }
 
                     //Ajout d'une entrée
                     NavigationLink("+", destination: EcranNouvelleEntree())
@@ -53,5 +61,5 @@ struct EcranJournal: View {
 }
 
 #Preview {
-    EcranJournal()
+    JournalView()
 }
