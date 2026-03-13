@@ -8,20 +8,16 @@
 import Foundation
 import Observation
 
-/*
 struct UsersResponse: Codable {
     let records: [UserRecord]
 }
 
-struct UserRecord: Codable, Identifiable {
-    let id: String
-    let createdTime: Date
+struct UserRecord: Codable {
     let fields: User
 }
-*/
 
 // modèle de l'utilisateur
-struct User: Identifiable {
+struct User: Identifiable, Codable {
     let id = UUID()
 
     // (pour création d'un compte)
@@ -34,8 +30,8 @@ struct User: Identifiable {
     let age: Int  // >= 15
 
     // (pour données relatives à son journal, ses quêtes et ses stats)
-    let entries: [Entry]
-    let quests: [Quest]
+    let entries: [String]?
+    let quests: [String]?
 
     private enum CodingKeys: String, CodingKey {
         case username
@@ -53,8 +49,8 @@ struct User: Identifiable {
         email: String,
         image: String,
         age: Int,
-        entries: [Entry] = [],
-        quests: [Quest] = []
+        entries: [String] = [],
+        quests: [String]
     ) {
         self.username = username
         self.password = password
@@ -66,21 +62,16 @@ struct User: Identifiable {
     }
 }
 
-/*
-  struct EntriesResponse: Codable {
-  let records: [EntryRecord]
-  }
+struct EntriesResponse: Codable {
+    let records: [EntryRecord]
+}
 
-  struct EntryRecord: Codable, Identifiable {
-  let id: String
-  let createdTime: Date
-  let fields: Entry
-  }
-  */
+struct EntryRecord: Codable {
+    let fields: Entry
+}
 
 // modèle de l'entrée d'un User`
-@Observable
-class Entry: Identifiable {
+class Entry: Identifiable, Codable {
     var id = UUID()
 
     // (obligatoire dans l'entrée)
@@ -89,14 +80,14 @@ class Entry: Identifiable {
 
     // (optionnels dans l'entrée)
     var notes: String?
-    var image: String?
+    var image: [Attachment]?
 
     /* (en standby, possiblement trop compliqué?)
-     let record: AVAudioRecorder?
-     let draw: UIImage? // NSImage? dérivé de la struct "PKDrawing"
-     let music: //API MusicKit ou AppleMusic avec AppleDeveloper key
-     let gif: String? // URL du GIF ou API Giphy
-     */
+    let record: AVAudioRecorder?
+    let draw: UIImage? // NSImage? dérivé de la struct "PKDrawing"
+    let music: //API MusicKit ou AppleMusic avec AppleDeveloper key
+    let gif: String? // URL du GIF ou API Giphy
+    */
 
     // (pour niveaux des jauges de santé)
     var anxiety: AnxietyLevel
@@ -120,7 +111,7 @@ class Entry: Identifiable {
         date: Date,
         emotion: Emotion,
         notes: String?,
-        image: String? = "default",
+        image: [Attachment]? = [],
         anxiety: AnxietyLevel,
         energy: EnergyLevel,
         appetite: AppetiteLevel,
@@ -137,6 +128,29 @@ class Entry: Identifiable {
         self.appetite = appetite
         self.sleep = sleep
     }
+}
+
+struct Attachment: Codable {
+    let id: String
+    let width: Int?
+    let height: Int?
+    let url: URL
+    let filename: String?
+    let size: Int?
+    let type: String?
+    let thumbnails: Thumbnails?
+}
+
+struct Thumbnails: Codable {
+    let small: ThumbnailVariant?
+    let large: ThumbnailVariant?
+    let full: ThumbnailVariant?
+}
+
+struct ThumbnailVariant: Codable {
+    let url: URL
+    let width: Int?
+    let height: Int?
 }
 
 // enums pour l'entrée d'un User
@@ -271,59 +285,134 @@ enum SleepLevel: String, CaseIterable, Codable {
     }
 }
 
+struct QuestsResponse: Codable {
+    let records: [QuestRecord]
+}
+
+struct QuestRecord: Identifiable, Codable {
+    let id: String
+    let fields: QuestFields
+}
+
+struct QuestFields: Codable {
+    let title: String
+    let questDescription: String
+    let progress: Int
+    let total: Int
+    let questType: String
+
+    let challengeType: ChallengeType?
+    let image: String?
+    let startDate: Date?
+    let endDate: Date?
+    let isCompleted: Bool?
+
+    let level: Int?
+}
+
 // modèle des différentes quêtes d'un User
-class Quest: Identifiable, Codable {
-    var id = UUID()
+class Quest: Identifiable {
+    var id: String
 
     var title: String
     var questDescription: String
     var progress: Int
     var total: Int
+    var questType: String
 
-    init(title: String, questDescription: String, progress: Int, total: Int) {
+    init(
+        id: String,
+        title: String,
+        questDescription: String,
+        progress: Int,
+        total: Int,
+        questType: String
+    ) {
+        self.id = id
         self.title = title
         self.questDescription = questDescription
         self.progress = progress
         self.total = total
+        self.questType = questType
     }
 }
 
-/*
+func convertQuest(from record: QuestRecord) -> Quest {
+    let fields = record.fields
+    if (fields.questType == "challenge") {
+        return Challenge(id: record.id, title: fields.title, questDescription: fields.questDescription, progress: fields.progress, total: fields.total, questType: fields.questType, challengeType: fields.challengeType ?? .solo, image: fields.image ?? "", isCompleted: fields.isCompleted ?? false)
+    } else {
+        return Stamp(id: record.id, title: fields.title, questDescription: fields.questDescription, progress: fields.progress, total: fields.total, questType: fields.questType, level: fields.level ?? 0)
+    }
+}
+
 // modèle des quêtes de type Challenge
 class Challenge: Quest {
-     var challengeType: ChallengeType
-     var image: String
-     var startDate: Date?
-     var endDate: Date?
-     var isCompleted: Bool
+    var challengeType: ChallengeType
+    var image: String
+    var startDate: Date?
+    var endDate: Date?
+    var isCompleted: Bool
 
-     init(title: String, questDescription: String, progress: Int, total: Int, challengeType: ChallengeType, image: String, startDate: Date?, endDate: Date?, isCompleted: Bool) {
-     self.challengeType = challengeType
-     self.image = image
-     self.startDate = startDate
-     self.endDate = endDate
-     self.isCompleted = isCompleted
-
-     super.init(title: title, questDescription: questDescription, progress: progress, total: total)
-     }
+    init(
+        id: String,
+        title: String,
+        questDescription: String,
+        progress: Int,
+        total: Int,
+        questType: String,
+        challengeType: ChallengeType,
+        image: String,
+        startDate: Date? = nil,
+        endDate: Date? = nil,
+        isCompleted: Bool
+    ) {
+        self.challengeType = challengeType
+        self.image = image
+        self.startDate = startDate
+        self.endDate = endDate
+        self.isCompleted = isCompleted
+        super.init(
+            id: id,
+            title: title,
+            questDescription: questDescription,
+            progress: progress,
+            total: total,
+            questType: questType
+        )
+    }
 }
 
 // enum des différentes catégories de Challenge
 enum ChallengeType: String, Codable {
     var id: RawValue { rawValue }
-    case solo = "Individuel"
-    case multi = "Collectif"
+    case solo = "individuel"
+    case multi = "collectif"
 }
 
 // modèle des quêtes de type Stamp
 class Stamp: Quest {
-    var level: Int // 0-5
+    var level: Int  // 0-5
 
-    init(title: String, questDescription: String, progress: Int, total: Int, level: Int) {
-    self.level = level
+    init(
+        id: String,
+        title: String,
+        questDescription: String,
+        progress: Int,
+        total: Int,
+        questType: String,
+        level: Int
+    ) {
+        self.level = level
 
-    super.init(title: title, questDescription: questDescription, progress: progress, total: total)
+        super.init(
+            id: id,
+            title: title,
+            questDescription: questDescription,
+            progress: progress,
+            total: total,
+            questType: questType
+        )
     }
 
 }
-*/
