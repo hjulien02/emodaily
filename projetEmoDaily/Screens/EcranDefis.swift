@@ -13,6 +13,7 @@ struct EcranDefis: View {
     @State var vmQuest = QuestsViewModel()
     @State var vmUser = UsersViewModel()
     @State var challenges = [Challenge]()
+    @State var isLoading = true
     
     func filterChallenges() -> [Challenge] {
         switch selectedPeriod {
@@ -44,15 +45,26 @@ struct EcranDefis: View {
                         )
                     }
                 }
-
-                ScrollView {
-                    ForEach(filterChallenges()) { challenge in
-                        Defi(challenge: challenge)
+                
+                if (isLoading) {
+                    ProgressView("Chargement...")
+                        .tint(Color("text"))
+                        .foregroundStyle(Color("text"))
+                        .scaleEffect(1.1)
+                        .frame(maxHeight: .infinity)
+                } else {
+                    ScrollView {
+                        VStack (spacing: 20) {
+                            ForEach(filterChallenges()) { challenge in
+                                DefiComponent(challenge: challenge)
+                            }
+                        }
                     }
                 }
             }
             .padding()
             .task {
+                isLoading = true
                 do {
                     try await vmUser.fetchUsers()
                 } catch {
@@ -72,6 +84,7 @@ struct EcranDefis: View {
                     }
                     challenges = result.compactMap { $0 as? Challenge }
                 }
+                isLoading = false
             }
         }
     }

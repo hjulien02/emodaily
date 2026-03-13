@@ -9,16 +9,23 @@ import SwiftUI
 
 struct EcranQuest: View {
     var body: some View {
-        ZStack {
-            Color.bg.ignoresSafeArea()
-            VStack {
-                Title(title: "Quêtes")
-                QuestMenu(questTitle: "Défis", questDescription: "Mettez-vous au défi, seul ou à plusieurs!", questImage: "challengesMenu")
-                    .padding(.bottom)
-                QuestMenu(questTitle: "Tampons", questDescription: "Consultez vos accomplisements!", questImage: "stampsMenu")
-                    .padding(.top)
+        NavigationStack {
+            ZStack {
+                Color.bg.ignoresSafeArea()
+                VStack {
+                    Title(title: "Quêtes")
+                    NavigationLink {
+                        EcranDefis()
+                    } label: {
+                        QuestMenu(questTitle: "Défis", questDescription: "Mettez-vous au défi, seul ou à plusieurs!", questImage: "challengesMenu")
+                            .foregroundStyle(.text)
+                            .padding(.bottom)
+                    }
+                    QuestMenu(questTitle: "Tampons", questDescription: "Consultez vos accomplisements!", questImage: "stampsMenu")
+                        .padding(.top)
+                }
+                .padding()
             }
-            .padding()
         }
     }
 }

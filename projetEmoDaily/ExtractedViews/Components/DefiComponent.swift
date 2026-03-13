@@ -1,5 +1,5 @@
 //
-//  Defi.swift
+//  DefiComponent.swift
 //  projetEmoDaily
 //
 //  Created by Apprenent 151 on 10/03/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Defi: View {
+struct DefiComponent: View {
     let challenge: Challenge
     
     let barWidth: CGFloat = 150
@@ -47,7 +47,7 @@ struct Defi: View {
                         .foregroundStyle(Color.text.opacity(0.2))
                     // superposer un RoundedRectangle montrant la progression
                     RoundedRectangle(cornerRadius: 20)
-                        .frame(width: 150 * ratio, height: 14)
+                        .frame(width: barWidth * ratio, height: 14)
                         .foregroundStyle(Color.green4)
                 }
                 Text("\(challenge.progress)/\(challenge.total)")
@@ -59,11 +59,11 @@ struct Defi: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity)
-        .background(challenge.challengeType == .solo ? Color.green15 : .pink.opacity(0.3))
+        .background(challenge.challengeType == .solo ? Color.green15 : .orange.opacity(0.4))
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 }
 
 #Preview {
-    Defi(challenge: Challenge(id: "1", title: "Streak 5 Jours", questDescription: "Enregistrez 5 entrées consécutives!", progress: 0, total: 5, questType: "challenge", challengeType: .multi, image: "🔥", isCompleted: false))
+    DefiComponent(challenge: Challenge(id: "1", title: "Streak 5 Jours", questDescription: "Enregistrez 5 entrées consécutives!", progress: 0, total: 5, questType: "challenge", challengeType: .multi, image: "🔥", isCompleted: false))
 }
