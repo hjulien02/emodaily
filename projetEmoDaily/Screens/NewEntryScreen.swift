@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct EcranNouvelleEntree: View {
-
-    @State var entry: Entry
+    
+    @Binding var currentEntry: Entry
+    
     @State var date: Date
 
     var rows = [
@@ -99,7 +100,7 @@ struct EcranNouvelleEntree: View {
                                         thisEmotion in
 
                                         EmotionButton(
-                                            entry: entry,
+                                            entry: currentEntry,
                                             emotion: thisEmotion, emotionText: thisEmotion.rawValue,
                                             emoji: thisEmotion.getEmoji()
                                         )
@@ -116,34 +117,34 @@ struct EcranNouvelleEntree: View {
                                     Button{
                                         showingNotePopover = true
                                     }label: {
-                                    if entry.notes! == "" {
+                                    if currentEntry.notes! == "" {
                                         EntryOption(
                                             icon: "character.circle.fill",
                                             optionTitle: "note"
                                         )
                                     } else {
-                                        FilledEntryOption(icon: "character.circle.fill", notes: entry.notes)
+                                        FilledEntryOption(icon: "character.circle.fill", notes: currentEntry.notes)
                                     }
                                 }
                                 .popover(isPresented: $showingNotePopover) {
-                                    NoteView(entry: entry, note: entry.notes!)
+                                    NoteView(entry: currentEntry, note: currentEntry.notes!)
                                     }
                                 
                                 Button{
                                     showingPicturePopover = true
                                 }label: {
-                                    if entry.image! == "" {
+                                    if currentEntry.image! == "" {
                                     EntryOption(
                                         icon: "photo.circle.fill",
                                         optionTitle: "photo"
                                     )
                                 } else {
-                                    FilledEntryOption(icon: "photo.circle.fill", picture: entry.image)
+                                    FilledEntryOption(icon: "photo.circle.fill", picture: currentEntry.image)
                                 }
                                 
                             }
                             .popover(isPresented: $showingPicturePopover) {
-                                PictureView(entry: entry)
+                                PictureView(entry: currentEntry)
                                 }
                                 
                             }
@@ -154,28 +155,28 @@ struct EcranNouvelleEntree: View {
                         EntrySection(title: "Et ta santé dans l’histoire ?") {
                             VStack(spacing: 22) {
                                 HealthSlider(
-                                    entry: entry,
+                                    entry: currentEntry,
                                     message: "Es-tu anxieux.se ?",
                                     healthLevels: anxietyValues,
                                     healthIcons: anxietyIcons,
                                     selectedLevel: $anxietyIndex
                                 )
                                 HealthSlider(
-                                    entry: entry,
+                                    entry: currentEntry,
                                     message: "Comment te sens-tu ?",
                                     healthLevels: energyValues,
                                     healthIcons: energyIcons,
                                     selectedLevel: $energyIndex
                                 )
                                 HealthSlider(
-                                    entry: entry,
+                                    entry: currentEntry,
                                     message: "As-tu de l’appétit?",
                                     healthLevels: appetiteValues,
                                     healthIcons: appetiteIcons,
                                     selectedLevel: $appetiteIndex
                                 )
                                 HealthSlider(
-                                    entry: entry,
+                                    entry: currentEntry,
                                     message: "Comment s’est passé ta nuit ?",
                                     healthLevels: sleepValues,
                                     healthIcons: sleepIcons,
@@ -188,13 +189,13 @@ struct EcranNouvelleEntree: View {
 
                         // CTA
                         Button {
-                            entry.date = date
+                            currentEntry.date = date
                             
-                            entry.anxiety = AnxietyLevel.allCases[anxietyIndex]
-                            entry.energy = EnergyLevel.allCases[energyIndex]
-                            entry.appetite =
+                            currentEntry.anxiety = AnxietyLevel.allCases[anxietyIndex]
+                            currentEntry.energy = EnergyLevel.allCases[energyIndex]
+                            currentEntry.appetite =
                                 AppetiteLevel.allCases[appetiteIndex]
-                            entry.sleep = SleepLevel.allCases[sleepIndex]
+                            currentEntry.sleep = SleepLevel.allCases[sleepIndex]
                         } label: {
                             Text("Enregistrer")
                         }
@@ -211,11 +212,11 @@ struct EcranNouvelleEntree: View {
                     .padding(.horizontal, 24)
                 }
             }
-        }
-        .foregroundStyle(.text)
+        }.foregroundStyle(.text)
     }
 }
 
+
 #Preview {
-    EcranNouvelleEntree(entry: entriesData[0], date: entriesData[0].date)
+    EcranNouvelleEntree(entry: UsersViewModel().connectedUser.entries[0]!, date: UsersViewModel().connectedUser.entries[0].date)
 }
