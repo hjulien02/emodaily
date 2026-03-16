@@ -1,5 +1,5 @@
 //
-//  EcranStamp.swift
+//  StampScreen.swift
 //  projetEmoDaily
 //
 //  Created by Apprenent 151 on 11/03/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EcranStamp: View {
+struct StampScreen: View {
     @State var vmQuest = QuestsViewModel()
     @State var vmUser = UsersViewModel()
     @State var stamps = [Stamp]()
@@ -95,5 +95,5 @@ struct EcranStamp: View {
 }
 
 #Preview {
-    EcranStamp()
+    StampScreen()
 }

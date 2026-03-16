@@ -1,5 +1,5 @@
 //
-//  EcranDefis.swift
+//  ChallengeScreen.swift
 //  projetEmoDaily
 //
 //  Created by Apprenent 151 on 10/03/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EcranDefis: View {
+struct ChallengeScreen: View {
     @State var selectedPeriod = "Individuel"
     @State var defisType = ["Individuel", "Collectif", "Mes défis"]
     @State var vmQuest = QuestsViewModel()
@@ -91,5 +91,5 @@ struct EcranDefis: View {
 }
 
 #Preview {
-    EcranDefis()
+    ChallengeScreen()
 }

@@ -1,21 +1,18 @@
 //
-//  EcranProfil.swift
+//  NewEntryScreen.swift
 //  projetEmoDaily
 //
-//  Created by Thomas Jegou on 04/03/2026.
+//  Created by Apprenant 148 on 04/03/2026.
 //
 
 import SwiftUI
 
-struct EcranProfil: View {
+struct NewEntryScreen: View {
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
-   
-// test
-
 
 #Preview {
-    EcranProfil()
+    NewEntryScreen()
 }

@@ -1,5 +1,5 @@
 //
-//  EcranQuest.swift
+//  QuestScreen.swift
 //  projetEmoDaily
 //
 //  Created by Apprenent 151 on 04/03/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EcranQuest: View {
+struct QuestScreen: View {
     var body: some View {
         NavigationStack {
             ZStack {
@@ -15,13 +15,13 @@ struct EcranQuest: View {
                 VStack {
                     Title(title: "Quêtes")
                     NavigationLink {
-                        EcranDefis()
+                        ChallengeScreen()
                     } label: {
                         QuestMenu(questTitle: "Défis", questDescription: "Mettez-vous au défi, seul ou à plusieurs!", questImage: "challengesMenu")
                             .padding(.bottom)
                     }
                     NavigationLink {
-                        EcranStamp()
+                        StampScreen()
                     } label: {
                         QuestMenu(questTitle: "Tampons", questDescription: "Consultez vos accomplisements!", questImage: "stampsMenu")
                             .padding(.top)
@@ -35,5 +35,5 @@ struct EcranQuest: View {
 }
 
 #Preview {
-    EcranQuest()
+    QuestScreen()
 }
