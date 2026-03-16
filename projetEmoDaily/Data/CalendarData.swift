@@ -95,4 +95,15 @@ struct CalendarData {
         return betweenDates(start: firstWeek.start, end: lastSunday)
     }
     
+//    static func generateMonth() -> [Date]{
+//        var months: [Date] = []
+//        let currentYear = calendar.component(.year, from: Date())
+//        for month in 1...12 {
+//            if let date = calendar.date(from: DateComponents(year: currentYear, month: month)){
+//                months.append(date)
+//            }
+//        }
+//        return months
+//    }
+    
 }

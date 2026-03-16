@@ -1,5 +1,5 @@
 //
-//  EcranJournal.swift
+//  DiaryScreen.swift
 //  projetEmoDaily
 //
 //  Created by Apprenant155 on 04/03/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct JournalView: View {
+struct DiaryScreen: View {
 
     @State var selectedPeriod = "Semaine"
     @State var period = ["Semaine", "Mois", "Année"]
@@ -36,9 +36,9 @@ struct JournalView: View {
                     //Affichage du calendrier (par semaine, mois ou année)
                     ScrollView {
                         if period[0].description == selectedPeriod {
-                            Text("Semaine")
+                            JournalWeek()
                         } else if period[1].description == selectedPeriod {
-                            JournalMonthView()
+                            JournalMonth()
                         } else {
                             Text("Année")
                         }
@@ -51,6 +51,7 @@ struct JournalView: View {
                         .frame(width: 64, height: 64)
                         .background(.green4)
                         .clipShape(Circle())
+                        //MODIFIER SHADOW
                         .shadow(color: .white, radius: 10)
 
                 }
@@ -61,5 +62,5 @@ struct JournalView: View {
 }
 
 #Preview {
-    JournalView()
+    DiaryScreen()
 }

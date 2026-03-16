@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct JournalMonthView: View {
+struct JournalMonth: View {
 
-    @State var displayedMonth = Date()
-    @State var selectedDate = Date.now
+    @State private var displayedMonth = Date()
+    @State private var selectedDate = Date.now
 
     //Lien API Entry et User
     @State var vmEntries = EntriesViewModel()
@@ -24,8 +24,13 @@ struct JournalMonthView: View {
         GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible()),
-        GridItem(.flexible()),
+        GridItem(.flexible())
     ]
+    
+    @State private var showModal = false
+    //Création d'une variable Entrée optionnel
+    //Pour savoir qu'elle entrée ouvre la popup
+    @State private var selectedEntry: Entry? = nil
 
     var body: some View {
         VStack {
@@ -75,9 +80,15 @@ struct JournalMonthView: View {
                         // Crée une constante "entry" qui contient la valeur
                         //Affiche les émojis en même temps que le mois en cours
                         if let entry = entryForMonth, isCurrentMonth {
-                            Text(entry.emotion.getEmoji())
-                                .font(.system(size: 25))
-                                .frame(height: 25)
+                            Button {
+                                showModal.toggle()
+                                selectedEntry = entry
+                            } label: {
+                                Text(entry.emotion.getEmoji())
+                                    .font(.system(size: 25))
+                                    .frame(height: 25)
+                            }
+                            
                         } else {
                             Circle()
                                 .fill(isCurrentMonth ? .bg : .green15)
@@ -93,10 +104,26 @@ struct JournalMonthView: View {
                         .fontWeight(isTodayDate ? .bold : .regular)
                         .frame(maxWidth: .infinity, minHeight: 25)
 
+                    }///end VStack
+                }///end ForEach
+                //Affiche les entrées sous forme de modal
+                .sheet(isPresented: $showModal){
+                    //if let entry = selectedEntry vérifie si selectedEntry n’est pas nil
+                    //Si oui, Swift crée une nouvelle constante entry non optionnelle dans le bloc
+                    if let entry = selectedEntry {
+                        EntryModal(entry: Entry(
+                            date: entry.date,
+                            emotion: entry.emotion,
+                            notes: entry.notes,
+                            image: entry.image,
+                            anxiety: entry.anxiety,
+                            energy: entry.energy,
+                            appetite: entry.appetite,
+                            sleep: entry.sleep
+                        ), dismissModal: $showModal)
                     }
-
                 }
-            }
+            }///end LazyVGrid
             .task {
                 do {
                     try await vmUser.fetchUsers()
@@ -127,5 +154,5 @@ struct JournalMonthView: View {
 }
 
 #Preview {
-    JournalMonthView()
+    JournalMonth()
 }
