@@ -70,7 +70,6 @@ struct StampPopup: View {
                     .font(.system(size: 18))
                     .frame(maxWidth: 400, alignment: .leading)
                     .padding()
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
                     .padding(
                         .init(top: 7.5, leading: 15, bottom: 7.5, trailing: 15)
                     )

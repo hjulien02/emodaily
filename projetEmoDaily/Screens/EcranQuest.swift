@@ -18,12 +18,16 @@ struct EcranQuest: View {
                         EcranDefis()
                     } label: {
                         QuestMenu(questTitle: "Défis", questDescription: "Mettez-vous au défi, seul ou à plusieurs!", questImage: "challengesMenu")
-                            .foregroundStyle(.text)
                             .padding(.bottom)
                     }
-                    QuestMenu(questTitle: "Tampons", questDescription: "Consultez vos accomplisements!", questImage: "stampsMenu")
-                        .padding(.top)
+                    NavigationLink {
+                        EcranStamp()
+                    } label: {
+                        QuestMenu(questTitle: "Tampons", questDescription: "Consultez vos accomplisements!", questImage: "stampsMenu")
+                            .padding(.top)
+                    }
                 }
+                .foregroundStyle(.text)
                 .padding()
             }
         }
