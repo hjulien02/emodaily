@@ -1,18 +1,18 @@
 //
-//  EcranStats.swift
+//  ChallengeScreen.swift
 //  projetEmoDaily
 //
-//  Created by Thomas Jegou on 04/03/2026.
+//  Created by Apprenent 151 on 04/03/2026.
 //
 
 import SwiftUI
 
-struct EcranStats: View {
+struct ChallengeScreen: View {
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
 
 #Preview {
-    EcranStats()
+    ChallengeScreen()
 }
