@@ -12,25 +12,28 @@ struct StampComponent: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // 1/2
+            // 1/2: titre
             Text(stamp.title)
                 .font(.title2)
                 .bold()
                 .frame(maxWidth: .infinity)
                 .padding()
-            // 2/2
+            
+            // 2/2: tampons
             HStack (spacing: 15){
                 ForEach(0..<5) { i in
                     ZStack {
                         Circle()
                             .fill(Color.text.opacity(0.3))
                             .frame(maxWidth: 64)
+                        // superpose un tampon si le level est complété
                         if (stamp.level > i) {
                             Image("stamp")
                                 .resizable()
                                 .scaledToFit()
                         }
                     }
+                    // alternation des paddings (haut/bas)
                     .padding(i % 2 == 0 ? .top : .bottom)
                 }
             }

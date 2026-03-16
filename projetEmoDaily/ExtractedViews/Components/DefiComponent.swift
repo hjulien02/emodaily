@@ -10,17 +10,24 @@ import SwiftUI
 struct DefiComponent: View {
     let challenge: Challenge
     
-    let barWidth: CGFloat = 150
-    var progressBar: CGFloat {
-        CGFloat(challenge.progress) / CGFloat(challenge.total)
-    }
+    // barre de progression (130px) et ratio
+    let barWidth: CGFloat = 130
     var ratio: CGFloat {
-        min(progressBar, 1)
+        min((CGFloat(challenge.progress) / CGFloat(challenge.total)), 1)
+    }
+    
+    // formatte la date de début/fin d'un challenge (si existante)
+    func formatRange(start: Date, end: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMM"
+        formatter.locale = Locale(identifier: "fr_FR")
+        
+        return "\(formatter.string(from: start)) - \(formatter.string(from: end))"
     }
     
     var body: some View {
         VStack (spacing: 0) {
-            // 1/2
+            // 1/2: titre/description/image
             HStack {
                 VStack (spacing: 10) {
                     Text(challenge.title)
@@ -35,12 +42,21 @@ struct DefiComponent: View {
                     .frame(maxWidth: 96)
             }
             .padding(.init(top: 15, leading: 15, bottom: 10, trailing: 15))
-            // 2/2
+            
+            // 2/2: calendrier et progression
             HStack {
                 Image(systemName: "calendar")
-                // if startDate & endDate existent, alors on met la date, sinon on met "pas de limite"
-                Text("Pas de limite")
-                    .frame(maxWidth: 120)
+                
+                // si le challenge possède un début/une fin datée, l'affiche, sinon affiche "pas de limite"
+                if let startDate = challenge.startDate, let endDate = challenge.endDate {
+                    Text(formatRange(start: startDate, end: endDate))
+                        .frame(maxWidth: 120)
+                } else {
+                    Text("Pas de limite")
+                        .frame(maxWidth: 120)
+                }
+                
+                // barre de progression
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 20)
                         .frame(width: barWidth, height: 14)
@@ -50,13 +66,16 @@ struct DefiComponent: View {
                         .frame(width: barWidth * ratio, height: 14)
                         .foregroundStyle(Color.green4)
                 }
+                
                 Text("\(challenge.progress)/\(challenge.total)")
                     .bold()
                     .frame(maxWidth: 60)
+                
             }
             .padding(.init(top: 10, leading: 15, bottom: 15, trailing: 15))
             .font(.system(size: 14))
             .frame(maxWidth: .infinity, alignment: .leading)
+            
         }
         .frame(maxWidth: .infinity)
         .background(challenge.challengeType == .solo ? Color.green15 : .orange.opacity(0.4))
@@ -65,5 +84,5 @@ struct DefiComponent: View {
 }
 
 #Preview {
-    DefiComponent(challenge: Challenge(id: "1", title: "Streak 5 Jours", questDescription: "Enregistrez 5 entrées consécutives!", progress: 0, total: 5, questType: "challenge", challengeType: .multi, image: "🔥", isCompleted: false))
+    DefiComponent(challenge: Challenge(id: "1", title: "Streak 5 Jours", questDescription: "Enregistrez 5 entrées consécutives!", progress: 1, total: 5, questType: "challenge", challengeType: .multi, image: "🔥", startDate: Date(), endDate: Date().addingTimeInterval(60*60*24*280), isCompleted: false))
 }

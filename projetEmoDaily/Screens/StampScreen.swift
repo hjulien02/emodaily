@@ -19,7 +19,7 @@ struct StampScreen: View {
             Color.bg.ignoresSafeArea()
             VStack(spacing: 20) {
                 Title(title: "Tampons")
-                
+
                 if isLoading {
                     ProgressView("Chargement...")
                         .tint(Color("text"))

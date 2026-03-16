@@ -19,11 +19,8 @@ struct StampPopup: View {
 
     // barre de progression
     let barWidth: CGFloat = 250
-    var progressBar: CGFloat {
-        CGFloat(stamp.progress) / CGFloat(stamp.total)
-    }
     var ratio: CGFloat {
-        min(progressBar, 1)
+        min((CGFloat(stamp.progress) / CGFloat(stamp.total)), 1)
     }
 
     var body: some View {
@@ -35,9 +32,8 @@ struct StampPopup: View {
                 }
 
             VStack {
-                // titre / navigation
+                // 1/4: titre / navigation
                 HStack {
-
                     Button {
                         prevIndex()
                     } label: {
@@ -53,6 +49,7 @@ struct StampPopup: View {
                         .font(.title2)
                         .bold()
                         .frame(maxWidth: .infinity)
+
                     Button {
                         nextIndex()
                     } label: {
@@ -65,7 +62,7 @@ struct StampPopup: View {
                 }
                 .padding(.init(top: 15, leading: 15, bottom: 7.5, trailing: 15))
 
-                // description
+                // 2/4: description
                 Text(stamp.questDescription)
                     .font(.system(size: 18))
                     .frame(maxWidth: 400, alignment: .leading)
@@ -74,7 +71,7 @@ struct StampPopup: View {
                         .init(top: 7.5, leading: 15, bottom: 7.5, trailing: 15)
                     )
 
-                // barre de progression
+                // 3/4: barre de progression
                 HStack(spacing: 0) {
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 20)
@@ -91,7 +88,7 @@ struct StampPopup: View {
                 }
                 .frame(maxWidth: .infinity)
 
-                // tampon
+                // 4/4: tampons
                 HStack(spacing: 15) {
                     ForEach(0..<5) { i in
                         VStack {
@@ -99,7 +96,8 @@ struct StampPopup: View {
                                 Circle()
                                     .fill(Color.text.opacity(0.3))
                                     .frame(maxWidth: 64)
-                                // tampon si complété (level)
+
+                                // superpose un tampon si complété (level)
                                 if stamp.level > i {
                                     Image("stamp")
                                         .resizable()
@@ -120,9 +118,7 @@ struct StampPopup: View {
                             }
 
                             // affiche les paliers complété et celui à venir (cache les autres)
-                            Text(
-                                i <= stamp.level ? "\(stamp.levelGoals[i])" : ""
-                            )
+                            Text(i <= stamp.level ? "\(stamp.levelGoals[i])" : "")
                             .frame(maxWidth: 50, maxHeight: 18)
                         }
                         .padding(i % 2 == 0 ? .top : .bottom)
