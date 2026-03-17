@@ -39,41 +39,48 @@ struct PictureView: View {
                     .italic()
                     .bold()
                     .opacity(0.5)
-
-                Button {
-                    showingImagePicker = true
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "plus.circle.fill")
-                        Text("Choisi ta photo")
-                            .font(.system(size: 12))
-                            .bold()
+                
+                if isUploading {
+                    ProgressView("Upload en cours...")
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .foregroundStyle(.green4)
+                        .bold()
+                        .opacity(0.7)
+                    
+                } else {
+                    
+                    Button {
+                        showingImagePicker = true
+                    } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: "plus.circle.fill")
+                            Text("Choisi ta photo")
+                                .font(.system(size: 12))
+                                .bold()
+                        }
+                        .opacity(0.5)
                     }
-                    .opacity(0.5)
-                }
-
-                if let selectedImage {
-                    selectedImage
-                        .resizable()
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .scaledToFit()
-                        .frame(maxWidth: .infinity)
-
-                } else if let url = entry.image?.first?.url {
-                    AsyncImage(url: url) { image in
-                        image
+                    
+                    if let selectedImage {
+                        selectedImage
                             .resizable()
-                            .scaledToFill()
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .background(
-                                RoundedRectangle(cornerRadius: 12).stroke(
-                                    .white.opacity(0.4),
-                                    lineWidth: 2
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .scaledToFit()
+                            .frame(maxWidth: .infinity)
+                        
+                    } else if let url = entry.image?.first?.url {
+                        AsyncImage(url: url) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12).stroke(
+                                        .white.opacity(0.4),
+                                        lineWidth: 2
+                                    )
                                 )
-                            )
-                    } placeholder: {
-                        if isUploading {
-                            ProgressView("Upload en cours…")
+                        } placeholder: {
                         }
                     }
                 }

@@ -10,14 +10,15 @@ import SwiftUI
 struct DateView: View {
 
     var dateRange: ClosedRange<Date> {
-        let start = Calendar.current.date(
-            byAdding: .day,
-            value: -7,
-            to: Date.now
-        )!
-        let end = Date.now
+        let calendar = Calendar.current
+        
+        let start = calendar.date(byAdding: .day, value: -7, to: Date.now)!
+        let end = calendar.startOfDay(for: Date.now)
+            .addingTimeInterval(86399) // pour indiquer jusqu'à 23:59:59
+        
         return start...end
     }
+    
     @Binding var showingDatePicker: Bool
     @Binding var selectedDate: Date
 
@@ -64,10 +65,12 @@ struct DateView: View {
     }
 }
 
+
+
 #Preview {
-    @Previewable
-    @State var showingPicker: Bool = false
-    @State var selectedDate: Date = Date()
+    @Previewable @State var showingPicker: Bool = false
+    @Previewable @State var selectedDate: Date = Calendar.current.date(
+           byAdding: .day, value: -3, to: Date.now) ?? Date.now
 
     DateView(showingDatePicker: $showingPicker, selectedDate: $selectedDate)
 }

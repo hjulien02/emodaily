@@ -62,11 +62,11 @@ class EntriesViewModel {
         user: [String]
     ) async throws -> Entry {
         //entrée à ajouter
-        let entry = Entry(
+        let entry = NewEntryFields(
             date: date,
             emotion: emotion,
             notes: notes,
-            image: image,
+            image: image?.map{AttachmentUpload(url: $0.url)},
             anxiety: anxiety,
             energy: energy,
             appetite: appetite,
@@ -74,7 +74,7 @@ class EntriesViewModel {
             user: user
         )
 
-        // encocodage JSON
+        // encodage JSON
         let encoder = JSONEncoder()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
@@ -97,7 +97,11 @@ class EntriesViewModel {
 
         do {
             let (data, _) = try await URLSession.shared.data(for: request)
-
+            
+            if let raw = String(data: data, encoding: .utf8) {
+                print("Réponse brute Airtable: \(raw)")
+            }
+            
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .formatted(formatter)
 

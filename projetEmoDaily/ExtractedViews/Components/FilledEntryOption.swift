@@ -27,7 +27,7 @@ struct FilledEntryOption: View {
                     Text(notes!.lowercased())
                         .font(.system(size: 12))
                         .multilineTextAlignment(.center)
-                        .lineLimit(3)
+                        .lineLimit(3, reservesSpace: true)
                         .truncationMode(.tail)
                         .opacity(0.8)
                 }

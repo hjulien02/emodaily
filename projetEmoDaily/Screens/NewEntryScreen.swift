@@ -48,6 +48,8 @@ struct NewEntryScreen: View {
     let sleepIcons = SleepLevel.allCases.map { $0.getSymbol() }
     @State var sleepIndex = 0
 
+    @State var alertUser: Bool = false
+    
     var body: some View {
         ZStack {
             Color.background
@@ -208,36 +210,39 @@ struct NewEntryScreen: View {
 
                             // CTA
                             Button {
-                                Task {
-                                    currentEntry.anxiety =
+                                if selectedEmotion.rawValue ==  "" {
+                                    alertUser = true
+                                } else {
+                                    Task {
+                                        currentEntry.anxiety =
                                         AnxietyLevel.allCases[anxietyIndex]
-                                    currentEntry.energy =
+                                        currentEntry.energy =
                                         EnergyLevel.allCases[energyIndex]
-                                    currentEntry.appetite =
+                                        currentEntry.appetite =
                                         AppetiteLevel.allCases[appetiteIndex]
-                                    currentEntry.sleep =
+                                        currentEntry.sleep =
                                         SleepLevel.allCases[sleepIndex]
-
-                                    do {
-                                        let entry =
+                                        do {
+                                            let entry =
                                             try await vmEntries.createNewEntry(
                                                 date: selectedDate,
                                                 emotion: selectedEmotion,
                                                 notes: note,
-                                                image: currentEntry.image,
+                                                image: image,
                                                 anxiety: currentEntry.anxiety,
                                                 energy: currentEntry.energy,
                                                 appetite: currentEntry.appetite,
                                                 sleep: currentEntry.sleep,
                                                 user: [vmUser.connectedUserID]
                                             )
-                                        await MainActor.run {
-                                            var newList = entriesList
-                                            newList.append(entry)
-                                            entriesList = newList
+                                            await MainActor.run {
+                                                var newList = entriesList
+                                                newList.append(entry)
+                                                entriesList = newList
+                                            }
+                                        } catch {
+                                            print(error)
                                         }
-                                    } catch {
-                                        print(error)
                                     }
                                 }
                             } label: {
@@ -254,22 +259,28 @@ struct NewEntryScreen: View {
 
                         }
                         .padding(.horizontal, 24)
+                        .padding(.bottom, 24)
                     }
                 }
             
-            if showingDatePopoup {
+            if showingDatePopoup || alertUser {
                 // Fond semi-transparent
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()
                     .onTapGesture {
                         // Fermer le pop-up en cliquant en dehors
                         showingDatePopoup = false
+                        alertUser = false
                     }
                 
-                DateView(
-                    showingDatePicker: $showingDatePopoup,
-                    selectedDate: $selectedDate
-                )
+                if showingDatePopoup {
+                    DateView(
+                        showingDatePicker: $showingDatePopoup,
+                        selectedDate: $selectedDate
+                    )
+                } else {
+                    UserAlert(showAlert: $alertUser, title: "Tu n'as pas d'émotion sélectionnée !", message: "Choisis une émotion dans \"Comment s'est passé ta journée\" avant d'enregistrer.", cancel: "J'y vais !")
+                }
             }
         }.foregroundStyle(.text)
             .toolbar {

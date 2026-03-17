@@ -73,10 +73,6 @@ struct EntryRecord: Codable {
     let fields: Entry
 }
 
-struct NewEntry: Codable {
-    let fields: Entry
-}
-
 // modèle de l'entrée d'un User
 class Entry: Identifiable, Codable {
     // (obligatoire dans l'entrée)
@@ -178,6 +174,38 @@ struct ThumbnailVariant: Codable {
 
 struct CloudinaryResponse: Codable {
     let secure_url: String
+}
+
+struct AttachmentUpload: Codable {
+    let url: URL
+}
+
+struct NewEntryFields: Codable {
+    var date: Date
+    var emotion: Emotion
+    var notes: String?
+    var image: [AttachmentUpload]?  // ✅ uniquement l'URL
+    var anxiety: AnxietyLevel
+    var energy: EnergyLevel
+    var appetite: AppetiteLevel
+    var sleep: SleepLevel
+    var user: [String]
+
+    private enum CodingKeys: String, CodingKey {
+        case date = "Date"
+        case emotion = "Emotion"
+        case notes = "Notes"
+        case image = "Image"
+        case anxiety = "AnxietyLevel"
+        case energy = "EnergyLevel"
+        case appetite = "AppetiteLevel"
+        case sleep = "SleepLevel"
+        case user = "User"
+    }
+}
+
+struct NewEntry: Codable {
+    let fields: NewEntryFields  // ⚠️ remplace "Entry" par "NewEntryFields"
 }
 
 // enums pour l'entrée d'un User
@@ -293,7 +321,7 @@ enum AppetiteLevel: String, CaseIterable, Identifiable, Codable {
     }
 }
 
-enum SleepLevel: String, CaseIterable, Codable {
+enum SleepLevel: String, CaseIterable, Identifiable, Codable {
     var id: RawValue { rawValue }
 
     case allnighter = "nuit blanche"
