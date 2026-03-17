@@ -18,10 +18,16 @@ struct StatsScreen: View {
     @State private var vmQuest = QuestsViewModel()
     @State private var stamps = [Stamp]()
     @State private var challenges = [Challenge]()
+    @State private var popupOpenedSleep: Bool = false
+    @State private var popupOpenedEnergy: Bool = false
+    @State private var popupOpenedEat: Bool = false
+    @State private var popupOpenedAnxiety: Bool = false
+
+
 
     private let jours: [(lettre: String, numero: Int)] = [
-        ("L", 10), ("M", 11), ("M", 12), ("J", 13),
-        ("V", 14), ("S", 15), ("D", 16),
+        ("L", 17), ("M", 18), ("M", 19), ("J", 20),
+        ("V", 21), ("S", 22), ("D", 23),
     ]
 
     var body: some View {
@@ -180,6 +186,7 @@ struct StatsScreen: View {
                                     spacing: 14
                                 ) {
                                     Button {
+                                        popupOpenedSleep = true
                                     } label: {
                                         CategorieCard(
                                             icone: "bed.double.fill",
@@ -187,6 +194,7 @@ struct StatsScreen: View {
                                         )
                                     }
                                     Button {
+                                        popupOpenedEat = true
                                     } label: {
                                         CategorieCard(
                                             icone: "fork.knife",
@@ -194,6 +202,7 @@ struct StatsScreen: View {
                                         )
                                     }
                                     Button {
+                                        popupOpenedEnergy = true
                                     } label: {
                                         CategorieCard(
                                             icone: "bolt.fill",
@@ -201,6 +210,7 @@ struct StatsScreen: View {
                                         )
                                     }
                                     Button {
+                                        popupOpenedAnxiety = true
                                     } label: {
                                         CategorieCard(
                                             icone: "waveform.path.ecg",
@@ -232,6 +242,34 @@ struct StatsScreen: View {
                         }
                     }
                 }
+                if popupOpenedSleep {
+                    StatPopupSleep(onClose: {
+                        popupOpenedSleep = false
+                    })
+                
+                }
+                
+                if popupOpenedEnergy {
+                    StatPopupEnergy(onClose: {
+                        popupOpenedEnergy = false
+                    })
+                
+                }
+                
+                if popupOpenedEat {
+                    StatPopupEat(onClose: {
+                        popupOpenedEat = false
+                    })
+                
+                }
+                
+                if popupOpenedAnxiety {
+                    StatPopupAnxiety(onClose: {
+                        popupOpenedAnxiety = false
+                    })
+                
+                }
+                
             }
             .task {
                 isLoading = true
