@@ -9,7 +9,28 @@ import SwiftUI
 
 struct QuestScreen: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            ZStack {
+                Color.bg.ignoresSafeArea()
+                VStack {
+                    Title(title: "Quêtes")
+                    NavigationLink {
+                        ChallengeScreen()
+                    } label: {
+                        QuestMenu(questTitle: "Défis", questDescription: "Mettez-vous au défi, seul ou à plusieurs!", questImage: "challengesMenu")
+                            .padding(.bottom)
+                    }
+                    NavigationLink {
+                        StampScreen()
+                    } label: {
+                        QuestMenu(questTitle: "Tampons", questDescription: "Consultez vos accomplisements!", questImage: "stampsMenu")
+                            .padding(.top)
+                    }
+                }
+                .foregroundStyle(.text)
+                .padding()
+            }
+        }
     }
 }
 
