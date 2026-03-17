@@ -36,7 +36,6 @@ struct ChallengeScreen: View {
         ZStack {
             Color.bg.ignoresSafeArea()
             VStack(spacing: 20) {
-                Title(title: "Défis")
                 HStack {
                     ForEach(defisType, id: \.self) { type in
                         PickerButton(
@@ -63,6 +62,11 @@ struct ChallengeScreen: View {
                 }
             }
             .padding()
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    ChildScreenTitle(title: "Défis")
+                }
+            }
             .task {
                 isLoading = true
                 do {

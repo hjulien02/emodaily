@@ -65,6 +65,7 @@ struct StampPopup: View {
                 // 2/4: description
                 Text(stamp.questDescription)
                     .font(.system(size: 18))
+                    .lineLimit(3, reservesSpace: true)
                     .frame(maxWidth: 400, alignment: .leading)
                     .padding()
                     .padding(

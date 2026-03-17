@@ -51,6 +51,8 @@ struct DefiComponent: View {
                 if let startDate = challenge.startDate, let endDate = challenge.endDate {
                     Text(formatRange(start: startDate, end: endDate))
                         .frame(maxWidth: 120)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                 } else {
                     Text("Pas de limite")
                         .frame(maxWidth: 120)
@@ -62,9 +64,11 @@ struct DefiComponent: View {
                         .frame(width: barWidth, height: 14)
                         .foregroundStyle(Color.text.opacity(0.2))
                     // superposer un RoundedRectangle montrant la progression
-                    RoundedRectangle(cornerRadius: 20)
-                        .frame(width: barWidth * ratio, height: 14)
-                        .foregroundStyle(Color.green4)
+                    if (challenge.progress > 0) {
+                        RoundedRectangle(cornerRadius: 20)
+                            .frame(width: max(barWidth * ratio, 4), height: 14)
+                            .foregroundStyle(Color.green4)
+                    }
                 }
                 
                 Text("\(challenge.progress)/\(challenge.total)")
@@ -84,5 +88,5 @@ struct DefiComponent: View {
 }
 
 #Preview {
-    DefiComponent(challenge: Challenge(id: "1", title: "Streak 5 Jours", questDescription: "Enregistrez 5 entrées consécutives!", progress: 1, total: 5, questType: "challenge", challengeType: .multi, image: "🔥", startDate: Date(), endDate: Date().addingTimeInterval(60*60*24*280), isCompleted: false))
+    DefiComponent(challenge: Challenge(id: "1", title: "Streak 5 Jours", questDescription: "Enregistrez 5 entrées consécutives!", progress: 1, total: 10, questType: "challenge", challengeType: .multi, image: "🔥", startDate: Date(), endDate: Date().addingTimeInterval(60*60*24*280), isCompleted: false))
 }

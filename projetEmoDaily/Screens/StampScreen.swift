@@ -18,7 +18,6 @@ struct StampScreen: View {
         ZStack {
             Color.bg.ignoresSafeArea()
             VStack(spacing: 20) {
-                Title(title: "Tampons")
 
                 if isLoading {
                     ProgressView("Chargement...")
@@ -66,6 +65,11 @@ struct StampScreen: View {
                     hasPrev: index > 0,
                     hasNext: index < stamps.count - 1
                 )
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                ChildScreenTitle(title: "Tampons")
             }
         }
         .task {
