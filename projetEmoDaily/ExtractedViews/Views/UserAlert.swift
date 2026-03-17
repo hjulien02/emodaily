@@ -56,7 +56,7 @@ struct UserAlert: View {
         .padding()
         .background(.green4)
         .cornerRadius(24)
-        .shadow(color: .background ,radius: 12)
+        .shadow(color: .bg ,radius: 12)
         .padding()
     }
 }

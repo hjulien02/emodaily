@@ -39,7 +39,7 @@ class UsersViewModel {
             self.connectedUser = users[0]
             
         } catch {
-            print("Échec du décodage: \(error)")
+            print("Échec du décodage Utilisateur: \(error)")
             throw error
         }
     }

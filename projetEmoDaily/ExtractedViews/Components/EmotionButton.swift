@@ -21,8 +21,8 @@ struct EmotionButton: View {
             VStack(spacing: 2){
                 ZStack{
                     Circle()
-                        .fill(selectedEmotion == emotion ? .green2 : Color.background.opacity(0.2))
-                        .stroke(selectedEmotion == emotion ? Color.green3.opacity(0.4) : Color.background.opacity(0.4), lineWidth: selectedEmotion == emotion ? 2 : 1)
+                        .fill(selectedEmotion == emotion ? .green2 : .bg.opacity(0.2))
+                        .stroke(selectedEmotion == emotion ? Color.green3.opacity(0.4) : .bg.opacity(0.4), lineWidth: selectedEmotion == emotion ? 2 : 1)
                         .frame(minWidth: 32, minHeight: 32)
 
                     Text(emoji)
@@ -39,7 +39,9 @@ struct EmotionButton: View {
     }
 }
 
-//#Preview {
-//    EmotionButton(entry: .constant(EntriesViewModel().fetchEntryByID(id: "rec0m9BW95h8Hqx7i")), emotion: EntriesViewModel().fetchEntryByID(id: "rec0m9BW95h8Hqx7i").emotion, emotionText: EntriesViewModel().fetchEntryByID(id: "rec0m9BW95h8Hqx7i").emotion.rawValue, emoji: EntriesViewModel().fetchEntryByID(id: "rec0m9BW95h8Hqx7i").emotion.getEmoji())
-//}
+#Preview {
+    @Previewable @State var selectedEmotion: Emotion = Emotion.boredom
+    
+    EmotionButton(selectedEmotion: $selectedEmotion, emotion: Emotion.boredom, emotionText: Emotion.boredom.rawValue, emoji: Emotion.boredom.getEmoji())
+}
 

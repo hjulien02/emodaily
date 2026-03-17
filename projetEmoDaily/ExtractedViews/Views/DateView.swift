@@ -58,7 +58,7 @@ struct DateView: View {
 
         }
         .padding()
-        .background(Color.background)
+        .background(.bg)
         .cornerRadius(24)
         .shadow(radius: 12)
         .padding()

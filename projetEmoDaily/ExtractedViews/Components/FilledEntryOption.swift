@@ -58,8 +58,8 @@ struct FilledEntryOption: View {
     }
 }
 
-//#Preview {
-//    FilledEntryOption(icon: "character.circle.fill", notes: "Mon chat est tombé malade...")
-//    FilledEntryOption(icon: "photo.circle.fill", picture: EntriesViewModel().fetchEntryByID(id: "rec0m9BW95h8Hqx7i").image)
-//}
+#Preview {
+    FilledEntryOption(icon: "character.circle.fill", notes: "Mon chat est tombé malade...")
+    FilledEntryOption(icon: "photo.circle.fill", picture: nil)
+}
 

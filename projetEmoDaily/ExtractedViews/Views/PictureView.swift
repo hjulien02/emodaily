@@ -28,7 +28,7 @@ struct PictureView: View {
     
     var body: some View {
         ZStack {
-            Color.background
+            Color.bg
                 .ignoresSafeArea()
 
             EntryOptionView(

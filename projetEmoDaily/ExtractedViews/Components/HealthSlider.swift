@@ -35,8 +35,8 @@ struct HealthSlider: View {
                             
                             ZStack{
                                 Circle()
-                                    .fill(i == selectedLevel ? .green2 : .background.opacity(0.2))
-                                    .overlay(i == selectedLevel ? Circle().stroke(.green3.opacity(0.4), lineWidth: 2): Circle().stroke(Color.background.opacity(0.4), lineWidth: 1) )
+                                    .fill(i == selectedLevel ? .green2 : .bg.opacity(0.2))
+                                    .overlay(i == selectedLevel ? Circle().stroke(.green3.opacity(0.4), lineWidth: 2): Circle().stroke(.bg.opacity(0.4), lineWidth: 1) )
                                     .frame(maxWidth: 36, maxHeight: 36)
                                 
                                 Image(systemName: symbol)
