@@ -1,5 +1,5 @@
 //
-//  EcranJournal.swift
+//  DiaryScreen.swift
 //  projetEmoDaily
 //
 //  Created by Apprenant155 on 04/03/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EcranJournal: View {
+struct DiaryScreen: View {
     
     @State var vmEntries = EntriesViewModel()
     @State var vmUser = UsersViewModel()
@@ -63,6 +63,6 @@ struct EcranJournal: View {
 }
 
 #Preview {
-    EcranJournal()
+    DiaryScreen()
 }
 

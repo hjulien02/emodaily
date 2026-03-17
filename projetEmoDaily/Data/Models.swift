@@ -172,6 +172,7 @@ struct ThumbnailVariant: Codable {
     let height: Int?
 }
 
+// (pour upload et requête POST)
 struct CloudinaryResponse: Codable {
     let secure_url: String
 }
@@ -184,7 +185,7 @@ struct NewEntryFields: Codable {
     var date: Date
     var emotion: Emotion
     var notes: String?
-    var image: [AttachmentUpload]?  // ✅ uniquement l'URL
+    var image: [AttachmentUpload]?  // renvoie uniquement l'URL
     var anxiety: AnxietyLevel
     var energy: EnergyLevel
     var appetite: AppetiteLevel
@@ -205,8 +206,9 @@ struct NewEntryFields: Codable {
 }
 
 struct NewEntry: Codable {
-    let fields: NewEntryFields  // ⚠️ remplace "Entry" par "NewEntryFields"
+    let fields: NewEntryFields
 }
+// (pour upload et requête POST)
 
 // enums pour l'entrée d'un User
 enum Emotion: String, CaseIterable, Identifiable, Codable {
@@ -366,6 +368,7 @@ struct QuestFields: Codable {
     let isCompleted: Bool?
 
     let level: Int?
+    let levelGoals: String?
 }
 
 // modèle des différentes quêtes d'un User
@@ -395,12 +398,22 @@ class Quest: Identifiable {
     }
 }
 
+func parseLevelGoals(text: String?) -> [Int] {
+    guard let text else { return [] }
+    
+    return text
+        .split(separator: ",")
+        .compactMap { Int($0.trimmingCharacters(in: .whitespaces)) }
+}
+
 func convertQuest(from record: QuestRecord) -> Quest {
     let fields = record.fields
     if (fields.questType == "challenge") {
-        return Challenge(id: record.id, title: fields.title, questDescription: fields.questDescription, progress: fields.progress, total: fields.total, questType: fields.questType, challengeType: fields.challengeType ?? .solo, image: fields.image ?? "", isCompleted: fields.isCompleted ?? false)
+        return Challenge(id: record.id, title: fields.title, questDescription: fields.questDescription, progress: fields.progress, total: fields.total, questType: fields.questType, challengeType: fields.challengeType ?? .solo, image: fields.image ?? "", startDate: fields.startDate, endDate: fields.endDate, isCompleted: fields.isCompleted ?? false)
     } else {
-        return Stamp(id: record.id, title: fields.title, questDescription: fields.questDescription, progress: fields.progress, total: fields.total, questType: fields.questType, level: fields.level ?? 0)
+        let goals = parseLevelGoals(text: fields.levelGoals)
+        
+        return Stamp(id: record.id, title: fields.title, questDescription: fields.questDescription.trimmingCharacters(in: .whitespacesAndNewlines), progress: fields.progress, total: fields.total, questType: fields.questType, level: fields.level ?? 0, levelGoals: goals)
     }
 }
 
@@ -451,6 +464,7 @@ enum ChallengeType: String, Codable {
 // modèle des quêtes de type Stamp
 class Stamp: Quest {
     var level: Int  // 0-5
+    var levelGoals: [Int]
 
     init(
         id: String,
@@ -459,9 +473,11 @@ class Stamp: Quest {
         progress: Int,
         total: Int,
         questType: String,
-        level: Int
+        level: Int,
+        levelGoals: [Int]
     ) {
         self.level = level
+        self.levelGoals = levelGoals
 
         super.init(
             id: id,
