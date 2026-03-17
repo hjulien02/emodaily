@@ -12,7 +12,7 @@ import Observation
 class EntriesViewModel {
     // initialisation clé API + URL AirTable
     private let apiKey: String =
-        "apikey1234
+        "api"
     private let baseURL = URL(
         string: "https://api.airtable.com/v0/appwe8Hf6wrPvRIR1/Entry"
     )!

@@ -11,7 +11,7 @@ import Observation
 @Observable @MainActor
 class UsersViewModel {
     // initialisation clé API + URL AirTable
-    private let apiKey: String = "apikey1234"
+    private let apiKey: String = "api"
     private let baseURL = URL(string: "https://api.airtable.com/v0/appwe8Hf6wrPvRIR1/User")!
     var users: [User] = []
     var connectedUser: User = User(username: "", password: "", email: "", image: "", age: 15, entries: [], quests: [])
