@@ -11,7 +11,7 @@ import Observation
 @Observable @MainActor
 class QuestsViewModel {
     // initialisation clé API + URL AirTable
-    private let apiKey: String = "apiKey123"
+    private let apiKey: String = "api"
     private let baseURL = URL(string: "https://api.airtable.com/v0/appwe8Hf6wrPvRIR1/Quest")!
     var quests: [Quest] = []
     
@@ -42,3 +42,4 @@ class QuestsViewModel {
         }
     }
 }
+
