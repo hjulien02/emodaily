@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct NoteView: View {
-    var entry: Entry
-
     @State var note: String = ""
-
+    @Binding var entryNotes: String
+    
+    @Binding var showingNotePopover: Bool
+    
     var body: some View {
         ZStack {
             Color.background
@@ -32,7 +33,8 @@ struct NoteView: View {
                 Spacer()
 
             } optionAction: {
-                entry.notes = note
+                entryNotes = note
+                showingNotePopover = false
             }
 
         }
@@ -40,5 +42,8 @@ struct NoteView: View {
 }
 
 #Preview {
-    NoteView(entry: entriesData[0])
+    @Previewable
+    @State var notes = ""
+    
+    NoteView(entryNotes: $notes, showingNotePopover: .constant(true))
 }

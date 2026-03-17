@@ -8,26 +8,23 @@
 import SwiftUI
 
 struct PictureView: View {
-    var entry: Entry
-    
+    @Binding var entry: Entry
+
     @State private var showingImagePicker = false
     @State private var selectedImage: Image?
     @State private var inputImage: UIImage?
-    
     func loadImage() {
-        guard let inputImage = inputImage else { return }
+        guard let inputImage else { return }
         selectedImage = Image(uiImage: inputImage)
     }
     
-    func uiImageToString(from image: UIImage, cq: CGFloat = 0.8) -> String? {
-        if let data = image.jpegData(compressionQuality: cq) {
-            return data.base64EncodedString(options: .endLineWithLineFeed)
-        } else if let data = image.pngData() {
-            return data.base64EncodedString()
-        }
+    @State private var isUploading = false
 
-        return nil
-    }
+    @Binding var showingPicturePopover: Bool
+    
+    @Binding var entryImage: [Attachment]?
+    
+    @State private var showingAlert = false
     
     var body: some View {
         ZStack {
@@ -42,7 +39,7 @@ struct PictureView: View {
                     .italic()
                     .bold()
                     .opacity(0.5)
-                
+
                 Button {
                     showingImagePicker = true
                 } label: {
@@ -54,39 +51,84 @@ struct PictureView: View {
                     }
                     .opacity(0.5)
                 }
-                
+
                 if let selectedImage {
                     selectedImage
                         .resizable()
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .scaledToFit()
                         .frame(maxWidth: .infinity)
-                    
-                } else if entry.image! != "" {
-                    Image(entry.image!)
-                        .resizable()
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .scaledToFit()
-                        .frame(maxWidth: .infinity)
+
+                } else if let url = entry.image?.first?.url {
+                    AsyncImage(url: url) { image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .background(
+                                RoundedRectangle(cornerRadius: 12).stroke(
+                                    .white.opacity(0.4),
+                                    lineWidth: 2
+                                )
+                            )
+                    } placeholder: {
+                        if isUploading {
+                            ProgressView("Upload en cours…")
+                        }
+                    }
                 }
-
-
             } optionAction: {
-                if let picture = inputImage {
-                    entry.image = uiImageToString(from: picture)
+                guard let picture = inputImage else { return }
+                
+                Task {
+                    do {
+                        isUploading = true
+                        let attachment = try await entry.uploadImageAsAttachment(picture)
+                        
+                        await MainActor.run {
+                            entryImage = [attachment]
+                            loadImage()
+                            isUploading = false
+                            showingPicturePopover = false
+                        }
+
+                    } catch {
+                        print("Erreur upload image: \(error)")
+                        
+                        showingAlert = true
+                        
+                        await MainActor.run {
+                            isUploading = false
+                        }
+                    }
                 }
             }
-            .sheet(isPresented: $showingImagePicker) {
-                ImagePicker(image: $inputImage)
-            }
-            .onChange(of: inputImage) {
-                loadImage()
-            }
-
+        }
+        .sheet(isPresented: $showingImagePicker) {
+            ImagePicker(image: $inputImage)
+        }
+        .onChange(of: inputImage) {
+            loadImage()
+        }
+        .alert("Une erreur s'est produite", isPresented: $showingAlert) {
+            Button("Réessayer", role: .cancel) { }
         }
     }
 }
 
 #Preview {
-    PictureView(entry: entriesData[3])
+    let sampleEntry = Entry(
+//        id: 2,
+        date: Date(),
+        emotion: .happiness,
+        notes: "",
+        image: nil,
+        anxiety: .neutral,
+        energy: .neutral,
+        appetite: .neutral,
+        sleep: .sleep,
+        user: [""]
+    )
+    PictureView(entry: .constant(sampleEntry), showingPicturePopover: .constant(true), entryImage: .constant(sampleEntry.image))
 }
+

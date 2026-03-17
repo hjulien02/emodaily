@@ -8,9 +8,6 @@
 import SwiftUI
 
 struct HealthSlider: View {
-
-    var entry: Entry
-    
     var message: String
     var healthLevels: [String]
     var healthIcons: [String]
@@ -80,8 +77,9 @@ struct HealthSlider: View {
 
 #Preview {
     HealthSlider(
-        entry: entriesData[0], message: "Titre de la section santé",
+        message: "Es-tu anxieux.se ?",
         healthLevels: AnxietyLevel.allCases.map { $0.rawValue },
         healthIcons: AnxietyLevel.allCases.map { $0.getSymbol() }, selectedLevel: .constant(3)
     )
 }
+

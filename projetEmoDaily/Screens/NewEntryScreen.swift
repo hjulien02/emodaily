@@ -7,20 +7,27 @@
 
 import SwiftUI
 
-struct EcranNouvelleEntree: View {
-    
-    @Binding var currentEntry: Entry
-    
-    @State var date: Date
+struct NewEntryScreen: View {
+    @Binding var vmEntries: EntriesViewModel
+    @Binding var vmUser: UsersViewModel
+    @Binding var entriesList: [Entry]
+
+    @State var currentEntry: Entry
 
     var rows = [
         GridItem(.flexible()),
-        GridItem(.flexible())
+        GridItem(.flexible()),
     ]
-    var columns = [GridItem(.flexible()), GridItem(.flexible())]
+
+    @State var selectedEmotion: Emotion
     
     @State private var showingNotePopover = false
+    @State var note: String = ""
+    
     @State private var showingPicturePopover = false
+    @State var image: [Attachment]?
+    
+    var columns = [GridItem(.flexible()), GridItem(.flexible())]
 
     let anxietyValues = AnxietyLevel.allCases.map { $0.rawValue }
     let anxietyIcons = AnxietyLevel.allCases.map { $0.getSymbol() }
@@ -77,7 +84,7 @@ struct EcranNouvelleEntree: View {
 
                         DatePicker(
                             "",
-                            selection: $date,
+                            selection: $currentEntry.date,
                             in: daysBefore...daysAfter,
                             displayedComponents: [.date]
                         )
@@ -92,61 +99,75 @@ struct EcranNouvelleEntree: View {
                     VStack(alignment: .leading, spacing: 24) {
 
                         //SECTION EMOTION
-                        EntrySection(title: "Comment s’est passée ta journée ?"){
+                        EntrySection(title: "Comment s’est passée ta journée ?")
+                        {
 
-                            GreenContainer{
+                            GreenContainer {
                                 LazyHGrid(rows: rows) {
-                                    ForEach(Emotion.allCases) {
+                                    ForEach(Emotion.allCases, id: \.self) {
                                         thisEmotion in
+                                        
+                                        if thisEmotion != Emotion.allCases.last{
+                                            EmotionButton(
+                                                selectedEmotion: $selectedEmotion, emotion: thisEmotion,
+                                                emotionText: thisEmotion.rawValue,
+                                                emoji: thisEmotion.getEmoji())
+                                        }
 
-                                        EmotionButton(
-                                            entry: currentEntry,
-                                            emotion: thisEmotion, emotionText: thisEmotion.rawValue,
-                                            emoji: thisEmotion.getEmoji()
-                                        )
                                     }
                                 }
                             }
                         }  //SECTION EMOTION
 
-
                         //SECTION OPTIONS
-                        EntrySection(title: "Quelque chose à raconter ?", subtitle: "Seulement si tu le veux..."){
+                        EntrySection(
+                            title: "Quelque chose à raconter ?",
+                            subtitle: "Seulement si tu le veux..."
+                        ) {
 
                             LazyVGrid(columns: columns) {
-                                    Button{
-                                        showingNotePopover = true
-                                    }label: {
-                                    if currentEntry.notes! == "" {
+                                Button {
+                                    showingNotePopover = true
+                                } label: {
+                                    if note != ""
+                                    {
+                                        FilledEntryOption(
+                                            icon: "character.circle.fill",
+                                            notes: note
+                                        )
+                                    } else {
                                         EntryOption(
                                             icon: "character.circle.fill",
                                             optionTitle: "note"
                                         )
-                                    } else {
-                                        FilledEntryOption(icon: "character.circle.fill", notes: currentEntry.notes)
                                     }
                                 }
                                 .popover(isPresented: $showingNotePopover) {
-                                    NoteView(entry: currentEntry, note: currentEntry.notes!)
-                                    }
-                                
-                                Button{
-                                    showingPicturePopover = true
-                                }label: {
-                                    if currentEntry.image! == "" {
-                                    EntryOption(
-                                        icon: "photo.circle.fill",
-                                        optionTitle: "photo"
+                                    NoteView(
+                                        entryNotes: $note, showingNotePopover: $showingNotePopover
                                     )
-                                } else {
-                                    FilledEntryOption(icon: "photo.circle.fill", picture: currentEntry.image)
                                 }
-                                
-                            }
-                            .popover(isPresented: $showingPicturePopover) {
-                                PictureView(entry: currentEntry)
+
+                                Button {
+                                    showingPicturePopover = true
+                                } label: {
+                                    if image != nil {
+                                        FilledEntryOption(
+                                            icon: "photo.circle.fill",
+                                            picture: image
+                                        )
+                                    } else {
+                                        EntryOption(
+                                            icon: "photo.circle.fill",
+                                            optionTitle: "photo"
+                                        )
+                                    }
+
                                 }
-                                
+                                .popover(isPresented: $showingPicturePopover) {
+                                    PictureView( entry: $currentEntry, showingPicturePopover: $showingPicturePopover, entryImage: $image)
+                                }
+
                             }
 
                         }  //SECTION OPTIONS
@@ -155,28 +176,24 @@ struct EcranNouvelleEntree: View {
                         EntrySection(title: "Et ta santé dans l’histoire ?") {
                             VStack(spacing: 22) {
                                 HealthSlider(
-                                    entry: currentEntry,
                                     message: "Es-tu anxieux.se ?",
                                     healthLevels: anxietyValues,
                                     healthIcons: anxietyIcons,
                                     selectedLevel: $anxietyIndex
                                 )
                                 HealthSlider(
-                                    entry: currentEntry,
                                     message: "Comment te sens-tu ?",
                                     healthLevels: energyValues,
                                     healthIcons: energyIcons,
                                     selectedLevel: $energyIndex
                                 )
                                 HealthSlider(
-                                    entry: currentEntry,
                                     message: "As-tu de l’appétit?",
                                     healthLevels: appetiteValues,
                                     healthIcons: appetiteIcons,
                                     selectedLevel: $appetiteIndex
                                 )
                                 HealthSlider(
-                                    entry: currentEntry,
                                     message: "Comment s’est passé ta nuit ?",
                                     healthLevels: sleepValues,
                                     healthIcons: sleepIcons,
@@ -189,13 +206,37 @@ struct EcranNouvelleEntree: View {
 
                         // CTA
                         Button {
-                            currentEntry.date = date
-                            
-                            currentEntry.anxiety = AnxietyLevel.allCases[anxietyIndex]
-                            currentEntry.energy = EnergyLevel.allCases[energyIndex]
-                            currentEntry.appetite =
-                                AppetiteLevel.allCases[appetiteIndex]
-                            currentEntry.sleep = SleepLevel.allCases[sleepIndex]
+                            Task {
+                                currentEntry.anxiety =
+                                    AnxietyLevel.allCases[anxietyIndex]
+                                currentEntry.energy =
+                                    EnergyLevel.allCases[energyIndex]
+                                currentEntry.appetite =
+                                    AppetiteLevel.allCases[appetiteIndex]
+                                currentEntry.sleep =
+                                    SleepLevel.allCases[sleepIndex]
+                                
+                                do {
+                                    let entry =
+                                        try await vmEntries.createNewEntry(
+                                            date: currentEntry.date,
+                                            emotion: selectedEmotion,
+                                            notes: note,
+                                            image: image,
+                                            anxiety: currentEntry.anxiety,
+                                            energy: currentEntry.energy,
+                                            appetite: currentEntry.appetite,
+                                            sleep: currentEntry.sleep, user: [$vmUser.connectedUserID]
+                                        )
+                                    await MainActor.run {
+                                                    var newList = entriesList
+                                                    newList.append(entry)
+                                                    entriesList = newList
+                                                }
+                                } catch {
+                                    print(error)
+                                }
+                            }
                         } label: {
                             Text("Enregistrer")
                         }
@@ -213,10 +254,36 @@ struct EcranNouvelleEntree: View {
                 }
             }
         }.foregroundStyle(.text)
+            .task {
+                do {
+                    try await vmUser.fetchUsers()
+                } catch {
+                    print(error)
+                }
+
+            }
     }
 }
 
-
 #Preview {
-    EcranNouvelleEntree(entry: UsersViewModel().connectedUser.entries[0]!, date: UsersViewModel().connectedUser.entries[0].date)
+        let sampleEntry = Entry(
+//            id: 2,
+            date: Date(),
+            emotion: .unchosen,
+            notes: "",
+            image: nil,
+            anxiety: .neutral,
+            energy: .neutral,
+            appetite: .neutral,
+            sleep: .sleep,
+            user: [""]
+        )
+        
+        NewEntryScreen(
+            vmEntries: .constant(EntriesViewModel()),
+            vmUser: .constant(UsersViewModel()),
+            entriesList: .constant([]),
+            currentEntry: sampleEntry, selectedEmotion: sampleEntry.emotion, note: sampleEntry.notes!
+        )
 }
+

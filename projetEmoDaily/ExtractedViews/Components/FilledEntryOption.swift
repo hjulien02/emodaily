@@ -11,18 +11,18 @@ struct FilledEntryOption: View {
     
     var icon: String
     var notes: String?
-    var picture: String?
+    var picture: [Attachment]?
     
     var body: some View {
         
         VStack(spacing: 16){
-        if icon == "character.circle.fill" {
-            Image(systemName: icon)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 16)
-            
-
+            if icon == "character.circle.fill" {
+                Image(systemName: icon)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 16)
+                
+                
                 VStack(alignment: .center){
                     Text(notes!.lowercased())
                         .font(.system(size: 12))
@@ -34,12 +34,21 @@ struct FilledEntryOption: View {
                 .frame(maxWidth: .infinity)
                 
             } else if icon == "photo.circle.fill" {
-                Image(picture!)
-                    .resizable()
-                    .scaledToFill()
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .background(RoundedRectangle(cornerRadius: 12).stroke(.white.opacity(0.4), lineWidth: 2))
+                VStack{
+                    if let url = picture?.first?.url {
+                        AsyncImage(url: url) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(maxWidth: 80, maxHeight: 80)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .background(RoundedRectangle(cornerRadius: 12).stroke(.white.opacity(0.4), lineWidth: 2))
 
+                        } placeholder: {
+                            ProgressView()
+                        }
+                    }
+                }
             }
         }
         .padding(12)
@@ -49,7 +58,8 @@ struct FilledEntryOption: View {
     }
 }
 
-#Preview {
-    FilledEntryOption(icon: "character.circle.fill", notes: "Mon chat est tombé malade...")
-    FilledEntryOption(icon: "photo.circle.fill", picture: "stampsMenu")
-}
+//#Preview {
+//    FilledEntryOption(icon: "character.circle.fill", notes: "Mon chat est tombé malade...")
+//    FilledEntryOption(icon: "photo.circle.fill", picture: EntriesViewModel().fetchEntryByID(id: "rec0m9BW95h8Hqx7i").image)
+//}
+

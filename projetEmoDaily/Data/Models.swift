@@ -7,12 +7,14 @@
 
 import Foundation
 import Observation
+import SwiftUI
 
 struct UsersResponse: Codable {
     let records: [UserRecord]
 }
 
 struct UserRecord: Codable {
+    let id: String
     let fields: User
 }
 
@@ -50,7 +52,7 @@ struct User: Identifiable, Codable {
         image: String,
         age: Int,
         entries: [String] = [],
-        quests: [String]
+        quests: [String] = []
     ) {
         self.username = username
         self.password = password
@@ -67,13 +69,16 @@ struct EntriesResponse: Codable {
 }
 
 struct EntryRecord: Codable {
+    let id: String
     let fields: Entry
 }
 
-// modèle de l'entrée d'un User`
-class Entry: Identifiable, Codable {
-    var id = UUID()
+struct NewEntry: Codable {
+    let fields: Entry
+}
 
+// modèle de l'entrée d'un User
+class Entry: Identifiable, Codable {
     // (obligatoire dans l'entrée)
     var date: Date
     var emotion: Emotion
@@ -95,6 +100,9 @@ class Entry: Identifiable, Codable {
     var appetite: AppetiteLevel
     var sleep: SleepLevel
 
+    // (pour renseigner l'utilisateur lié à l'entrée)
+    let user: [String]
+    
     private enum CodingKeys: String, CodingKey {
         case date = "Date"
         case emotion = "Emotion"
@@ -104,21 +112,20 @@ class Entry: Identifiable, Codable {
         case energy = "EnergyLevel"
         case appetite = "AppetiteLevel"
         case sleep = "SleepLevel"
+        case user = "User"
     }
 
     init(
-        id: UUID = UUID(),
         date: Date,
         emotion: Emotion,
-        notes: String?,
+        notes: String? = "",
         image: [Attachment]? = [],
         anxiety: AnxietyLevel,
         energy: EnergyLevel,
         appetite: AppetiteLevel,
-        sleep: SleepLevel
+        sleep: SleepLevel,
+        user: [String]
     ) {
-        self.id = id
-
         self.date = date
         self.emotion = emotion
         self.notes = notes
@@ -127,11 +134,27 @@ class Entry: Identifiable, Codable {
         self.energy = energy
         self.appetite = appetite
         self.sleep = sleep
+        self.user = user
+    }
+    
+    func uploadImageAsAttachment(_ image: UIImage) async throws -> Attachment {
+        let url = try await uploadImage(image)
+        
+        return Attachment(
+            id: nil,
+            width: Int(image.size.width),
+            height: Int(image.size.height),
+            url: url,
+            filename: "new_image.jpg",
+            size: image.jpegData(compressionQuality: 0.8)?.count,
+            type: "image/jpeg",
+            thumbnails: nil
+        )
     }
 }
 
 struct Attachment: Codable {
-    let id: String
+    let id: String?
     let width: Int?
     let height: Int?
     let url: URL
@@ -153,6 +176,10 @@ struct ThumbnailVariant: Codable {
     let height: Int?
 }
 
+struct CloudinaryResponse: Codable {
+    let secure_url: String
+}
+
 // enums pour l'entrée d'un User
 enum Emotion: String, CaseIterable, Identifiable, Codable {
     var id: RawValue { rawValue }
@@ -167,6 +194,7 @@ enum Emotion: String, CaseIterable, Identifiable, Codable {
     case sad = "triste"
     case sorrow = "chagrin"
     case sick = "malade"
+    case unchosen = ""
 
     func getEmoji() -> String {
         switch self {
@@ -190,6 +218,8 @@ enum Emotion: String, CaseIterable, Identifiable, Codable {
             "😞"
         case .sick:
             "🤒"
+        case .unchosen:
+            "❌"
         }
     }
 }
@@ -416,3 +446,4 @@ class Stamp: Quest {
     }
 
 }
+

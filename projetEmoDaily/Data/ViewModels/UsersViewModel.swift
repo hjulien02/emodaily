@@ -11,12 +11,11 @@ import Observation
 @Observable @MainActor
 class UsersViewModel {
     // initialisation clé API + URL AirTable
-    private let apiKey: String = "apiKey123"
+    private let apiKey: String = "apikey1234"
     private let baseURL = URL(string: "https://api.airtable.com/v0/appwe8Hf6wrPvRIR1/User")!
     var users: [User] = []
     var connectedUser: User = User(username: "", password: "", email: "", image: "", age: 15, entries: [], quests: [])
-    var entries: [Entry] = []
-    var quests: [Quest] = []
+    var connectedUserID : String = ""
     
     func fetchUsers() async throws {
         // requête
@@ -33,12 +32,16 @@ class UsersViewModel {
 
         do {
             let decoded = try decoder.decode(UsersResponse.self, from: data)
+            let usersRecords = decoded.records.map { $0 }
             let users = decoded.records.map { $0.fields }
             self.users = users
+            self.connectedUserID = usersRecords[0].id
             self.connectedUser = users[0]
+            
         } catch {
             print("Échec du décodage: \(error)")
             throw error
         }
     }
 }
+
