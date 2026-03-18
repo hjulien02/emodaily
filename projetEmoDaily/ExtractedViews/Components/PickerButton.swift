@@ -24,7 +24,7 @@ struct PickerButton: View {
             }
             .padding()
             .frame(width: 120)
-            .background(selectedPicker == text ? .green1 : Color("background"))
+            .background(selectedPicker == text ? .green1 : .bg)
             .clipShape(RoundedRectangle(cornerRadius: 30))
     
         }

@@ -1,5 +1,9 @@
-//  EcranStats.swift
+//
+//  StatsScreen.swift
 //  projetEmoDaily
+//
+//  Created by Thomas Jegou on 04/03/2026.
+//
 
 import SwiftUI
 
