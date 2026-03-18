@@ -12,43 +12,36 @@ struct MonthlyGrid: View {
     @Binding var displayedMonth: Date
     @Binding var selectedDate: Date
 
-    //Modal
-    //Création d'une variable Entrée optionnel
-    //Pour savoir qu'elle entrée ouvre la popup
+    // Modal
+    // Création d'une variable Entrée optionnelle
     @Binding var selectedEntry: Entry?
 
     var entriesList: [Entry] = []
-
     let columns = Array(repeating: GridItem(.flexible()), count: 7)
 
     var body: some View {
         VStack {
-
-            //Affiche le mois avec les nombres, et les entrées de l'utilisateur
+            // Affiche le mois avec les nombres, et les entrées de l'utilisateur
             LazyVGrid(columns: columns) {
-
                 let days = CalendarData.generatedMonthGrid(
                     for: displayedMonth
                 )
 
                 ForEach(days, id: \.self) { day in
-
-                    //Mois actuel
-                    //Compare un jour avec un jour du mois actuel
+                    // Mois actuel - compare un jour avec un jour du mois actuel
                     let isCurrentMonth = CalendarData.calendar.isDate(
                         day,
                         equalTo: displayedMonth,
                         toGranularity: .month
                     )
 
-                    //Date selectionnée
-                    //Verifie que selectedDate est bien égal à day
+                    // Date sélectionnée - vérifie que selectedDate = day
                     let isTodayDate = CalendarData.calendar.isDate(
                         selectedDate,
                         inSameDayAs: day
                     )
 
-                    //Parcours les entrées et cherche les jours qui ont la meme date que day
+                    // Parcourt les entrées et cherche les jours qui ont la même date que day
                     let entryForMonth = entriesList.first {
                         Calendar.current.isDate(
                             $0.date,
@@ -57,11 +50,8 @@ struct MonthlyGrid: View {
                     }
 
                     VStack(spacing: 2) {
-
-                        // Vérifie si une entrée existe pour ce jour et crée une constante
-                        // Affiche les émojis en même temps que le mois en cours
+                        // si entryForMonth existe et qu'elle est inclus dans isCurrentMonth
                         if let entry = entryForMonth, isCurrentMonth {
-
                             Button {
                                 selectedEntry = entry
                             } label: {
@@ -69,14 +59,13 @@ struct MonthlyGrid: View {
                                     .font(.system(size: 25))
                                     .frame(height: 25)
                             }
-
                         } else {
                             Circle()
                                 .fill(isCurrentMonth ? .bg : .green15)
                                 .frame(width: 30, height: 25)
                         }
 
-                        //Numéro du jour
+                        // Numéro du jour
                         Text(
                             "\(CalendarData.calendar.component(.day, from: day))"
                         )
@@ -85,21 +74,20 @@ struct MonthlyGrid: View {
                         .fontWeight(isTodayDate ? .bold : .regular)
                         .frame(maxWidth: .infinity, minHeight: 25)
 
-                    }///end VStack
+                    } // end VStack
+                } // end ForEach
 
-                }///end ForEach
-
-                    //Si contrôle de la modal avec une valeur optionnel => item
-                    //Si données => ouvre la modal, si nil n'ouvre pas la modal
+                    // Si contrôle de la modal avec une valeur optionnel => item
+                    // Si données => ouvre la modal, si nil n'ouvre pas la modal
                     .sheet(item: $selectedEntry) { entry in
                         EntryModal(entry: entry)
                             .presentationDetents([.large])
                             .presentationDragIndicator(.visible)
                     }
 
-            }///end LazyVGrid
+            } // end LazyVGrid
                 .frame(height: 347)
-        }///end VStack
+        } // end VStack
 
     }
 }

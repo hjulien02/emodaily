@@ -27,7 +27,7 @@ struct ChallengeComponent: View {
     
     var body: some View {
         VStack (spacing: 0) {
-            // 1/2: titre/description/image
+            // titre/description/image
             HStack {
                 VStack (spacing: 10) {
                     Text(challenge.title)
@@ -43,7 +43,7 @@ struct ChallengeComponent: View {
             }
             .padding(.init(top: 15, leading: 15, bottom: 10, trailing: 15))
             
-            // 2/2: calendrier et progression
+            // calendrier et progression
             HStack {
                 Image(systemName: "calendar")
                 

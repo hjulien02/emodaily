@@ -14,12 +14,14 @@ struct QuestMenu: View {
     
     var body: some View {
         VStack (spacing: 0) {
+            
             Image(questImage)
                 .resizable()
                 .scaledToFill()
                 .opacity(0.7)
                 .frame(height: 180)
                 .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 20))
+            
             VStack (spacing: 0) {
                 Text(questTitle)
                     .font(.title)

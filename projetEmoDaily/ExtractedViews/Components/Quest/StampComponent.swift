@@ -12,14 +12,14 @@ struct StampComponent: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // 1/2: titre
+            // titre
             Text(stamp.title)
                 .font(.title2)
                 .bold()
                 .frame(maxWidth: .infinity)
                 .padding()
             
-            // 2/2: tampons
+            // tampons
             HStack (spacing: 15){
                 ForEach(0..<5) { i in
                     ZStack {

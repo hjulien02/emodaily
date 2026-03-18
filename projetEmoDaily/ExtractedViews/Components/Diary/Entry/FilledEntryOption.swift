@@ -22,7 +22,6 @@ struct FilledEntryOption: View {
                     .scaledToFit()
                     .frame(maxWidth: 16)
                 
-                
                 VStack(alignment: .center){
                     Text(notes!.lowercased())
                         .font(.system(size: 12))

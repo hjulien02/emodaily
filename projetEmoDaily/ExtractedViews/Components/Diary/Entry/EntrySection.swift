@@ -25,7 +25,6 @@ struct EntrySection<Content: View>: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            
             content()
         }
         .frame(maxWidth: .infinity)

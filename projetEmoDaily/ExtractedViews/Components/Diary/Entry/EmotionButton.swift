@@ -17,9 +17,10 @@ struct EmotionButton: View {
     var body: some View {
         Button{
             selectedEmotion = emotion
-        }label: {
+        } label: {
             VStack(spacing: 2){
-                ZStack{
+                
+                ZStack {
                     Circle()
                         .fill(selectedEmotion == emotion ? .green2 : .bg.opacity(0.2))
                         .stroke(selectedEmotion == emotion ? Color.green3.opacity(0.4) : .bg.opacity(0.4), lineWidth: selectedEmotion == emotion ? 2 : 1)
@@ -28,7 +29,7 @@ struct EmotionButton: View {
                     Text(emoji)
                         .frame(minWidth: 24, minHeight: 24)
                 }
-                
+
                 Text(emotionText)
                     .font(.system(size: 12))
                     .foregroundStyle(selectedEmotion == emotion ? .green4 : .text)

@@ -27,25 +27,24 @@ struct WeekdayHeader: View {
         }
     }
 
-    //Navigue entre les mois et les semaines
+    // Navigue entre les mois et les semaines
     func changeDate(by value: Int) {
         switch periodType {
         case .year:
-            // Récupère l'année actuelle
             let currentYear = Calendar.current.component(
                 .year,
                 from: displayedDate
             )
-            // Année actuelle + 1 => Nouvelle année
+            // Année suivante (année actuelle + 1)
             let newYear = currentYear + value
 
-            // Essaie de créer une nouvelle date (1er janvier de la nouvelle année)
-            // Si la création réussit, on met à jour displayedDate
+            // On met à jour displayedDate si newDate existe
             if let newDate = Calendar.current.date(
                 from: DateComponents(year: newYear, month: 1, day: 1)
             ) {
                 displayedDate = newDate
             }
+            
         case .month:
             // Ajoute ou enlève un mois à la date actuelle
             // Si nil, on garde la date actuelle
@@ -54,8 +53,8 @@ struct WeekdayHeader: View {
                     byAdding: Calendar.Component.month,
                     value: value,
                     to: displayedDate
-                        //Si nil garde la date actuelle
                 ) ?? displayedDate
+            
         case .weekOfYear:
             // Ajoute ou enlève une semaine (7 jours)
             // Si nil, on garde la date actuelle
@@ -96,7 +95,6 @@ struct WeekdayHeader: View {
             .bold()
 
         }
-
     }
 }
 

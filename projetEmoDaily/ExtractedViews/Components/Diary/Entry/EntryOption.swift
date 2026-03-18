@@ -13,13 +13,11 @@ struct EntryOption: View {
     var optionTitle: String
     
     var body: some View {
-        
         VStack(spacing: 16){
             Image(systemName: icon)
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: 32)
-            
             Text(optionTitle)
                 .font(.system(size: 12))
         }

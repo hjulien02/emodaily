@@ -67,11 +67,9 @@ struct HealthSlider: View {
                         .bold()
                     
                 }
-                
             }
         }
         .frame(alignment: .leading)
-
     }
 }
 
