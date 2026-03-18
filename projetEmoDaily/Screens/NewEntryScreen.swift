@@ -136,7 +136,7 @@ struct NewEntryScreen: View {
                                     }
                                 }
                                 .popover(isPresented: $showingNotePopover) {
-                                    NoteView(
+                                    NoteModal(
                                         entryNotes: $note,
                                         showingNotePopover:
                                             $showingNotePopover
@@ -162,7 +162,7 @@ struct NewEntryScreen: View {
                                 .popover(
                                     isPresented: $showingPicturePopover
                                 ) {
-                                    PictureView(
+                                    PictureModal(
                                         entry: $currentEntry,
                                         showingPicturePopover:
                                             $showingPicturePopover,
@@ -274,7 +274,7 @@ struct NewEntryScreen: View {
                     }
                 
                 if showingDatePopoup {
-                    DateView(
+                    DateModal(
                         showingDatePicker: $showingDatePopoup,
                         selectedDate: $selectedDate
                     )

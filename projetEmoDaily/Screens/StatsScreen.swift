@@ -22,12 +22,7 @@ struct StatsScreen: View {
     @State private var vmQuest = QuestsViewModel()
     @State private var stamps = [Stamp]()
     @State private var challenges = [Challenge]()
-    @State private var popupOpenedSleep: Bool = false
-    @State private var popupOpenedEnergy: Bool = false
-    @State private var popupOpenedEat: Bool = false
-    @State private var popupOpenedAnxiety: Bool = false
-
-
+    @State private var popupIndex: Int? = nil
 
     private let jours: [(lettre: String, numero: Int)] = [
         ("L", 17), ("M", 18), ("M", 19), ("J", 20),
@@ -163,18 +158,18 @@ struct StatsScreen: View {
 
                                     VStack(alignment: .leading, spacing: 12) {
                                         MoodStat(
-                                            couleur: Color("green2"),
-                                            pourcentage: "10%",
+                                            color: Color("green2"),
+                                            percentage: "10%",
                                             emoji: "😊"
                                         )
                                         MoodStat(
-                                            couleur: Color("green3"),
-                                            pourcentage: "20%",
+                                            color: Color("green3"),
+                                            percentage: "20%",
                                             emoji: "😐"
                                         )
                                         MoodStat(
-                                            couleur: Color("green4"),
-                                            pourcentage: "70%",
+                                            color: Color("green4"),
+                                            percentage: "70%",
                                             emoji: "😔"
                                         )
                                     }
@@ -190,34 +185,34 @@ struct StatsScreen: View {
                                     spacing: 14
                                 ) {
                                     Button {
-                                        popupOpenedSleep = true
+                                        popupIndex = 0
                                     } label: {
-                                        CategorieCard(
-                                            icone: "bed.double.fill",
+                                        CategoryCard(
+                                            icon: "bed.double.fill",
                                             label: "Sommeil"
                                         )
                                     }
                                     Button {
-                                        popupOpenedEat = true
+                                        popupIndex = 1
                                     } label: {
-                                        CategorieCard(
-                                            icone: "fork.knife",
+                                        CategoryCard(
+                                            icon: "fork.knife",
                                             label: "Appetit"
                                         )
                                     }
                                     Button {
-                                        popupOpenedEnergy = true
+                                        popupIndex = 2
                                     } label: {
-                                        CategorieCard(
-                                            icone: "bolt.fill",
+                                        CategoryCard(
+                                            icon: "bolt.fill",
                                             label: "Énergie"
                                         )
                                     }
                                     Button {
-                                        popupOpenedAnxiety = true
+                                        popupIndex = 3
                                     } label: {
-                                        CategorieCard(
-                                            icone: "waveform.path.ecg",
+                                        CategoryCard(
+                                            icon: "waveform.path.ecg",
                                             label: "Anxiété"
                                         )
                                     }
@@ -227,15 +222,15 @@ struct StatsScreen: View {
                                 HStack(spacing: 10) {
                                     StatBottom(
                                         label: "Entrées",
-                                        valeur: "\(nbEntrees)"
+                                        value: "\(nbEntrees)"
                                     )
                                     StatBottom(
                                         label: "Challenges",
-                                        valeur: "\(nbChallenges)"
+                                        value: "\(nbChallenges)"
                                     )
                                     StatBottom(
                                         label: "Tampons",
-                                        valeur: "\(nbTampons)"
+                                        value: "\(nbTampons)"
                                     )
                                 }
                                 .padding(.top, 14)
@@ -246,34 +241,24 @@ struct StatsScreen: View {
                         }
                     }
                 }
-                if popupOpenedSleep {
-                    StatPopupSleep(onClose: {
-                        popupOpenedSleep = false
-                    })
-                
+                if let index = popupIndex {
+                    StatPopup(
+                        onClose: { popupIndex = nil },
+                        currentIndex: index,
+                        nextIndex: {
+                            if index < 3 {
+                                popupIndex = index + 1
+                            }
+                        },
+                        prevIndex: {
+                            if index > 0 {
+                                popupIndex = index - 1
+                            }
+                        },
+                        hasPrev: index > 0,
+                        hasNext: index < 3
+                    )
                 }
-                
-                if popupOpenedEnergy {
-                    StatPopupEnergy(onClose: {
-                        popupOpenedEnergy = false
-                    })
-                
-                }
-                
-                if popupOpenedEat {
-                    StatPopupEat(onClose: {
-                        popupOpenedEat = false
-                    })
-                
-                }
-                
-                if popupOpenedAnxiety {
-                    StatPopupAnxiety(onClose: {
-                        popupOpenedAnxiety = false
-                    })
-                
-                }
-                
             }
             .task {
                 isLoading = true

@@ -1,24 +1,19 @@
 
-//  CategorieCard.swift
+//  CategoryCard.swift
 //  projetEmoDaily
 //
 //  Created by Thomas Jegou on 11/03/2026.
 //
 
-//
-//  CategorieCard.swift
-//  projetEmoDaily
-//
-
 import SwiftUI
 
-struct CategorieCard: View {
-    let icone: String
+struct CategoryCard: View {
+    let icon: String
     let label: String
 
     var body: some View {
         VStack(spacing: 6) {
-            Image(systemName: icone)
+            Image(systemName: icon)
                 .font(.system(size: 18, weight: .medium))
                 .foregroundStyle(.white)
             Text(label)
@@ -32,6 +27,6 @@ struct CategorieCard: View {
 }
 
 #Preview {
-    CategorieCard(icone: "heart.fill", label: "Émotions")
+    CategoryCard(icon: "heart.fill", label: "Émotions")
         .padding()
 }

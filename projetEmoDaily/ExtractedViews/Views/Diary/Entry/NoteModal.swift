@@ -1,5 +1,5 @@
 //
-//  noteView.swift
+//  NoteModal.swift
 //  projetEmoDaily
 //
 //  Created by Apprenant 148 on 06/03/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NoteView: View {
+struct NoteModal: View {
     @State var note: String = ""
     @Binding var entryNotes: String
     
@@ -18,7 +18,7 @@ struct NoteView: View {
             Color.bg
                 .ignoresSafeArea()
 
-            EntryOptionView(
+            EntryOptionModal(
                 image: "character.circle.fill",
                 option: "Note"
             ) {
@@ -45,5 +45,5 @@ struct NoteView: View {
     @Previewable
     @State var notes = ""
     
-    NoteView(entryNotes: $notes, showingNotePopover: .constant(true))
+    NoteModal(entryNotes: $notes, showingNotePopover: .constant(true))
 }

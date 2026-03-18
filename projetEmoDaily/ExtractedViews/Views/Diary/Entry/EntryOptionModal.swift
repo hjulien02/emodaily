@@ -1,5 +1,5 @@
 //
-//  EntryOptionView.swift
+//  EntryOptionModal.swift
 //  projetEmoDaily
 //
 //  Created by Apprenant 148 on 12/03/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EntryOptionView<Content: View>: View {
+struct EntryOptionModal<Content: View>: View {
     var image: String
     var option: String
 
@@ -73,7 +73,7 @@ struct EntryOptionView<Content: View>: View {
 }
 
 #Preview {
-    EntryOptionView(image: "character.circle.fill", option: "Note") {
+    EntryOptionModal(image: "character.circle.fill", option: "Note") {
         Text("Que se passe-t-il ?")
             .italic()
             .bold()
