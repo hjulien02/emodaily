@@ -21,13 +21,6 @@ struct StatPopup: View {
         }
     }
 
-    var avg: String {
-        String(
-            format: "%.2f",
-            Double(barData.reduce(0, +)) / Double(barData.count)
-        )
-    }
-
     var title: String {
         switch currentIndex {
         case 0: return "Qualité de sommeil"
@@ -78,7 +71,7 @@ struct StatPopup: View {
                     }
                 }
 
-                Text("Moyenne: \(avg) sur \(barData.count) jours")
+                Text("sur \(barData.count) jours")
                     .font(.system(size: 16))
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

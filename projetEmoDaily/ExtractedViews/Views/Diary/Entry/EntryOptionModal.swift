@@ -30,13 +30,13 @@ struct EntryOptionModal<Content: View>: View {
                 }
                 .offset(y: 24)
 
-                VStack(alignment: .center, spacing: 16) {
+                VStack(alignment: .leading, spacing: 16) {
                     content()
                 }
                 .padding(24)
                 .frame(
                     maxWidth: .infinity,
-                    alignment: .center
+                    alignment: .leading
                 )
                 .background(
                     RoundedRectangle(cornerRadius: 20)

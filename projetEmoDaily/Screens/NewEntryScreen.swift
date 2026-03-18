@@ -74,6 +74,7 @@ struct NewEntryScreen: View {
                         )
                         .padding(.vertical, 8)
                         .padding(.horizontal, 16)
+                        .frame(maxWidth: 210)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
                                 .fill(.green4)
@@ -275,6 +276,7 @@ struct NewEntryScreen: View {
                     .padding(.horizontal, 24)
                     .padding(.bottom, 24)
                 }
+                .scrollIndicators(.hidden)
             }
             
             if showingDatePopup || alertUserEmotion || alertUserDate {

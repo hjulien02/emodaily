@@ -39,12 +39,11 @@ struct PictureModal: View {
                     .italic()
                     .bold()
                     .opacity(0.5)
-                    .multilineTextAlignment(.center)
                     .padding(.bottom, 12)
                 
                 if isUploading {
                     ProgressView("Upload en cours...")
-                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundStyle(.green4)
                         .bold()
                         .opacity(0.7)
@@ -61,7 +60,7 @@ struct PictureModal: View {
                                 .bold()
                         }
                         .opacity(0.5)
-                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     
                     if let selectedImage {

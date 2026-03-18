@@ -145,6 +145,7 @@ struct ProfileScreen: View {
                     .padding(.top, 8)
                     .padding(.bottom, 32)
                 }
+                .scrollIndicators(.hidden)
             }
             .navigationBarTitleDisplayMode(.large)
             .task {

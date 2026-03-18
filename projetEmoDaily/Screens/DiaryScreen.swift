@@ -61,7 +61,7 @@ struct DiaryScreen: View {
                     } else {
                         
                         //Affichage du calendrier (par semaine, mois ou année)
-                        ScrollView {
+                        VStack {
                             if period[0].description == selectedPeriod {
                                 DiaryWeek(vmDiary: vmDiary)
                             } else if period[1].description == selectedPeriod {
@@ -71,6 +71,7 @@ struct DiaryScreen: View {
                             }
                         }
                     }
+                    Spacer()
                     
                     //Ajout d'une entrée
                     NavigationLink("+") {

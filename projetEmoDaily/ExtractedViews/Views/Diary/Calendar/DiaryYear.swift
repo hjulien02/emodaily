@@ -103,7 +103,8 @@ struct DiaryYear: View {
                         )
                     }
 
-                }///end ScrollView
+                }
+                .scrollIndicators(.hidden)///end ScrollView
 
             }///end ScrollViewReader
 

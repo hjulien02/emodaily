@@ -59,6 +59,7 @@ struct ChallengeScreen: View {
                             }
                         }
                     }
+                    .scrollIndicators(.hidden)
                 }
             }
             .padding()

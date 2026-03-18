@@ -14,13 +14,13 @@ struct ContentView: View {
                 .tabItem{
                     Label("Journal", systemImage: "book.pages.fill")
                 }
-            StatsScreen()
-                .tabItem{
-                    Label("Statistiques", systemImage: "chart.pie.fill")
-                }
             QuestScreen()
                 .tabItem{
                     Label("Quêtes", systemImage: "trophy.fill")
+                }
+            StatsScreen()
+                .tabItem{
+                    Label("Statistiques", systemImage: "chart.pie.fill")
                 }
             ProfileScreen()
                 .tabItem{
