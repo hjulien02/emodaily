@@ -12,7 +12,7 @@ struct EntryModal: View {
     let entry: Entry
     let today = Date()
 
-    //Ferme la vue actuelle (pas de synchronisation comme le Binding)
+    //Ferme la vue actuelle
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -23,7 +23,7 @@ struct EntryModal: View {
 
             VStack {
 
-                //Date selectionnée
+                // Date selectionnée
                 Text(
                     entry.date.formatted(
                         .dateTime.day().month(.wide).year().locale(
@@ -36,8 +36,7 @@ struct EntryModal: View {
                 .padding(.top, 20)
 
                 ScrollView {
-
-                    //Emotion
+                    // Emotion
                     Text(entry.emotion.getEmoji())
                         .font(.system(size: 32))
                         .padding(8)
@@ -45,7 +44,7 @@ struct EntryModal: View {
                         .clipShape(RoundedRectangle(cornerRadius: 25))
                     Text(entry.emotion.rawValue)
 
-                    //Etat du jour (anxiete, energie, appetit, sommeil)
+                    // Etat du jour (anxiete, energie, appetit, sommeil)
                     VStack {
                         HStack {
                             Text("Ton mood")
@@ -84,7 +83,7 @@ struct EntryModal: View {
                     }///end VStack
                         .padding(.vertical)
 
-                    //Notes
+                    // Notes
                     if entry.notes != nil {
                         VStack(alignment: .leading) {
                             HStack {
@@ -100,7 +99,7 @@ struct EntryModal: View {
                         .padding(.bottom)
                     }
 
-                    //Photos
+                    // Photos
                     if let url = entry.image?.first?.url {
                         VStack(alignment: .leading) {
                             HStack {
@@ -123,11 +122,10 @@ struct EntryModal: View {
                         }
                         .padding(.bottom)
                     }
+                }///end ScrollView
+                .scrollIndicators(.hidden)
 
-                }
-                ///end ScrollView
-
-                //Bouton - Modifier l'entrée que pour le jour même
+                // Bouton - Modifier l'entrée que pour le jour même
                 if Calendar.current.isDateInToday(entry.date) {
                     Button {
                         dismiss()
@@ -142,6 +140,7 @@ struct EntryModal: View {
                 }
 
                 Spacer()
+                
             }///end VStack
                 .padding()
         }///end ZStack

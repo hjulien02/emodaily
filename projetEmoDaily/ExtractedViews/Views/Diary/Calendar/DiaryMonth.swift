@@ -15,13 +15,13 @@ struct DiaryMonth: View {
     var body: some View {
         VStack {
 
-            //Header - Mois
+            // Header - Mois
             WeekdayHeader(
                 displayedDate: $vmDiary.displayedMonth,
                 periodType: .month
             )
 
-            //Affiche les jours de la semaine
+            // Affiche les jours de la semaine
             HStack {
                 ForEach(CalendarData.weekdays.indices, id: \.self) { index in
                     Spacer()
@@ -32,11 +32,10 @@ struct DiaryMonth: View {
 
             VStack {
 
-                //Affichage des entrées du mois en cours
+                // Affichage des entrées du mois en cours
                 MonthlyGrid(
                     displayedMonth: $vmDiary.displayedMonth,
                     selectedDate: $vmDiary.selectedDate,
-                    //Essaie de le passer en Binding alors que pas possible donc sans le $
                     selectedEntry: $vmDiary.selectedEntry,
                     entriesList: vmDiary.entriesList
                 )

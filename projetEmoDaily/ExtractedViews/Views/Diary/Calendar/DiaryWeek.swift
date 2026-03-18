@@ -17,7 +17,7 @@ struct DiaryWeek: View {
 
         VStack {
 
-            //Header - Semaine
+            // Header - Semaine
             WeekdayHeader(
                 displayedDate: $vmDiary.displayedMonth,
                 periodType: .weekOfYear
@@ -25,33 +25,33 @@ struct DiaryWeek: View {
 
             LazyHGrid(rows: rows) {
 
-                //Affiche les jours de la semaine
+                // Affiche les jours de la semaine
                 ForEach(CalendarData.weekdays.indices, id: \.self) {
                     index in
                     Text(CalendarData.weekdays[index])
                 }
 
-                //Affiche les jours du mois
+                // Affiche les jours du mois
                 let days = CalendarData.generatedMonthGrid(
                     for: vmDiary.displayedMonth
                 )
 
                 ForEach(days, id: \.self) { day in
 
-                    //Semaine actuelle
+                    // Semaine actuelle
                     let isCurrentWeek = CalendarData.calendar.isDate(
                         day,
                         equalTo: vmDiary.displayedMonth,
                         toGranularity: .weekOfYear
                     )
 
-                    //Date selectionnée
+                    // Date selectionnée
                     let isTodayDate = CalendarData.calendar.isDate(
                         vmDiary.selectedDate,
                         inSameDayAs: day
                     )
 
-                    //Entrée de cette semaine
+                    // Entrée de cette semaine
                     let entryForWeek = vmDiary.entriesList.first {
                         Calendar.current.isDate($0.date, inSameDayAs: day)
                     }
@@ -73,8 +73,6 @@ struct DiaryWeek: View {
                                         Text(entry.emotion.getEmoji())
 
                                         if entry.notes != nil {
-                                            //?? Opérateur remplacement de nil
-                                            //Ternaire
                                             Text(entry.notes ?? "")
                                                 .foregroundStyle(.text)
                                         } else {
@@ -84,10 +82,8 @@ struct DiaryWeek: View {
                                             )
                                             .foregroundStyle(.text)
                                         }
-
                                     }
                                     .padding()
-
                                 }
                             }
                             .frame(width: 262, alignment: .leading)
@@ -95,18 +91,19 @@ struct DiaryWeek: View {
                             .clipShape(RoundedRectangle(cornerRadius: 20))
                         }///end HStack
 
-                    }///End isCurrentWeek
+                    }///end isCurrentWeek
 
-                }///End ForEach
-                    //Si contrôle de la modal avec une valeur optionnel => item
-                    //Si données => ouvre la modal, si nil n'ouvre pas la modal
+                }///end ForEach
+                
+                    // Si contrôle de la modal avec une valeur optionnel => item
+                    // Si données => ouvre la modal
                     .sheet(item: $vmDiary.selectedEntry) { entry in
                         EntryModal(entry: entry)
                             .presentationDetents([.large])
                             .presentationDragIndicator(.visible)
                     }
 
-            }///End LazyHGrid
+            }///end LazyHGrid
                 .frame(height: 374)
         }
         .padding()

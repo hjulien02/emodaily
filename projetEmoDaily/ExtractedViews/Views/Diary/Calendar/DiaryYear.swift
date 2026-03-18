@@ -11,14 +11,12 @@ struct DiaryYear: View {
 
     @ObservedObject var vmDiary: DiaryViewModel
 
-    //Extraction du mois et de l'année
+    // Extraction du mois et de l'année
     func startOfMonth(from date: Date) -> Date {
         let components = Calendar.current.dateComponents(
             [.year, .month],
             from: date
         )
-        //retourne une date (le premier jour du mois)
-        //! Force car la date ne sera pas nil
         return Calendar.current.date(from: components)!
     }
 
@@ -26,13 +24,13 @@ struct DiaryYear: View {
 
         VStack {
 
-            //Header
+            // Header
             WeekdayHeader(
                 displayedDate: $vmDiary.displayedMonth,
                 periodType: .year
             )
 
-            //Affiche les jours de la semaine
+            // Affiche les jours de la semaine
             HStack {
                 ForEach(CalendarData.weekdays.indices, id: \.self) { index in
                     Spacer()
@@ -41,15 +39,13 @@ struct DiaryYear: View {
                 }
             }
 
-            //Affiche le mois actuel en premier
+            // Affiche le mois actuel en premier
             ScrollViewReader { proxy in
-
                 ScrollView {
 
                     VStack {
-
                         ForEach(
-                            //Génère les 12 mois de l'année
+                            // Génère les 12 mois de l'année
                             CalendarData.generateMonth(
                                 for: Calendar.current.component(
                                     .year,
@@ -70,7 +66,7 @@ struct DiaryYear: View {
                             }
 
                             VStack(alignment: .leading) {
-                                //Affichage du mois (sans l'année)
+                                // Affichage du mois (sans l'année)
                                 Text(
                                     CalendarData.monthTitle(
                                         for: month,
@@ -79,23 +75,22 @@ struct DiaryYear: View {
                                 )
                                 .bold()
 
-                                //Affichage des mois avec les données
+                                // Affichage des mois avec les données
                                 MonthlyGrid(
                                     displayedMonth: .constant(month),
                                     selectedDate: $vmDiary.selectedDate,
                                     selectedEntry: $vmDiary.selectedEntry,
                                     entriesList: entriesForMonth
                                 )
-                                //id pour le scroll
+                                // id pour le scroll
                                 .id(month)
                             }
                             .padding(.vertical)
-
                         }
                     }
 
                     // Scroll automatique vers le mois actuel
-                    //Remet à Janvier au clic de l'année suivante
+                    // Remet à Janvier au clic de l'année suivante
                     .task(id: vmDiary.displayedMonth) {
                         proxy.scrollTo(
                             startOfMonth(from: vmDiary.displayedMonth),
@@ -103,8 +98,8 @@ struct DiaryYear: View {
                         )
                     }
 
-                }
-                .scrollIndicators(.hidden)///end ScrollView
+                }///end ScrollView
+                .scrollIndicators(.hidden)
 
             }///end ScrollViewReader
 

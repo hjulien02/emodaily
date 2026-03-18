@@ -40,7 +40,7 @@ struct DiaryScreen: View {
                 VStack {
                     Title(title: "Journal")
                     
-                    //Affichage des periodes
+                    // Affichage des periodes
                     HStack {
                         ForEach(period, id: \.self) { onePeriod in
                             PickerButton(
@@ -51,7 +51,7 @@ struct DiaryScreen: View {
                     }
                     .padding(.bottom, 10)
                     
-                    //Chargement
+                    // Chargement des données
                     if isLoading {
                         ProgressView("Chargement des données")
                             .tint(Color("text"))
@@ -59,8 +59,7 @@ struct DiaryScreen: View {
                             .scaleEffect(1.1)
                             .frame(maxHeight: .infinity)
                     } else {
-                        
-                        //Affichage du calendrier (par semaine, mois ou année)
+                        // Affichage du calendrier (par semaine, mois ou année)
                         VStack {
                             if period[0].description == selectedPeriod {
                                 DiaryWeek(vmDiary: vmDiary)
@@ -71,9 +70,10 @@ struct DiaryScreen: View {
                             }
                         }
                     }
+                    
                     Spacer()
                     
-                    //Ajout d'une entrée
+                    // Ajout d'une entrée
                     NavigationLink("+") {
                         NewEntryScreen(vmEntries: $vmDiary.vmEntries, vmUser: $vmDiary.vmUser, entriesList: $vmDiary.entriesList, currentEntry: makeFakeEntry(), selectedEmotion: makeFakeEntry().emotion, note: makeFakeEntry().notes!)
                     }
@@ -83,18 +83,16 @@ struct DiaryScreen: View {
                     .background(.green4)
                     .clipShape(Circle())
                     .shadow(color: .white, radius: 10)
-                    
                 }
                 .padding()
             }
         }
-        //Données
+        // Données
         .task {
             isLoading = true
             await vmDiary.loadData()
             isLoading = false
         }
-
     }
 }
 
