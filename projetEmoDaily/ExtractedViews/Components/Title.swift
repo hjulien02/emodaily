@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Title: View {
     let title: String
-    
+
     var body: some View {
         Text(title)
             .font(.custom("Noteworthy", size: 32))
