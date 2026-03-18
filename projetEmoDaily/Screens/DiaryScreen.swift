@@ -9,8 +9,13 @@ import SwiftUI
 
 struct DiaryScreen: View {
 
-    @State var selectedPeriod = "Semaine"
+    @State var selectedPeriod = "Mois"
     @State var period = ["Semaine", "Mois", "Année"]
+
+    @StateObject private var vmDiary = DiaryViewModel()
+
+    //Chargement de la page
+    @State var isLoading = true
 
     var body: some View {
 
@@ -34,29 +39,45 @@ struct DiaryScreen: View {
                     .padding(.bottom, 10)
 
                     //Affichage du calendrier (par semaine, mois ou année)
-                    ScrollView {
-                        if period[0].description == selectedPeriod {
-                            JournalWeek()
-                        } else if period[1].description == selectedPeriod {
-                            JournalMonth()
-                        } else {
-                            Text("Année")
+
+                    //Chargement
+                    if isLoading {
+                        ProgressView("Chargement des données")
+                            .tint(Color("text"))
+                            .foregroundStyle(Color("text"))
+                            .scaleEffect(1.1)
+                            .frame(maxHeight: .infinity)
+                    } else {
+
+                        ScrollView {
+                            if period[0].description == selectedPeriod {
+                                DiaryWeek(vmDiary: vmDiary)
+                            } else if period[1].description == selectedPeriod {
+                                DiaryMonth(vmDiary: vmDiary)
+                            } else {
+                                DiaryYear(vmDiary: vmDiary)
+                            }
                         }
                     }
 
                     //Ajout d'une entrée
-                    NavigationLink("+", destination: EcranNouvelleEntree())
+                    NavigationLink("+", destination: NewEntryScreen())
                         .foregroundStyle(.white)
                         .bold()
                         .frame(width: 64, height: 64)
                         .background(.green4)
                         .clipShape(Circle())
-                        //MODIFIER SHADOW
                         .shadow(color: .white, radius: 10)
 
                 }
                 .padding()
             }
+        }
+        //Données
+        .task {
+            isLoading = true
+            await vmDiary.loadData()
+            isLoading = false
         }
     }
 }

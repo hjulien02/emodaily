@@ -10,28 +10,55 @@ import SwiftUI
 struct WeekdayHeader: View {
 
     @Binding var displayedDate: Date
-    var component: Calendar.Component
+    let periodType: Calendar.Component
 
     var titleCalendar: String {
-        if component == .month {
-            return CalendarData.monthText(from: displayedDate)
-        } else {
+        switch periodType {
+        case .month:
+            return CalendarData.monthTitle(for: displayedDate)
+        case .weekOfYear:
             let weekNumber = CalendarData.weekNumber(from: displayedDate)
             return "Semaine \(weekNumber)"
+        case .year:
+            let year = Calendar.current.component(.year, from: displayedDate)
+            return "\(year)"
+        default:
+            return ""
         }
     }
 
     //Navigue entre les mois et les semaines
     func changeDate(by value: Int) {
-        switch component {
+        switch periodType {
+        case .year:
+            // Récupère l'année actuelle
+            let currentYear = Calendar.current.component(
+                .year,
+                from: displayedDate
+            )
+            // Année actuelle + 1 => Nouvelle année
+            let newYear = currentYear + value
+
+            // Essaie de créer une nouvelle date (1er janvier de la nouvelle année)
+            // Si la création réussit, on met à jour displayedDate
+            if let newDate = Calendar.current.date(
+                from: DateComponents(year: newYear, month: 1, day: 1)
+            ) {
+                displayedDate = newDate
+            }
         case .month:
+            // Ajoute ou enlève un mois à la date actuelle
+            // Si nil, on garde la date actuelle
             displayedDate =
                 CalendarData.calendar.date(
                     byAdding: Calendar.Component.month,
                     value: value,
                     to: displayedDate
+                        //Si nil garde la date actuelle
                 ) ?? displayedDate
         case .weekOfYear:
+            // Ajoute ou enlève une semaine (7 jours)
+            // Si nil, on garde la date actuelle
             displayedDate =
                 CalendarData.calendar.date(
                     byAdding: .day,
@@ -67,12 +94,12 @@ struct WeekdayHeader: View {
             }
             .foregroundStyle(.text)
             .bold()
-            
+
         }
 
     }
 }
 
 #Preview {
-    WeekdayHeader(displayedDate: .constant(Date.now), component: .month)
+    WeekdayHeader(displayedDate: .constant(Date.now), periodType: .weekOfYear)
 }
