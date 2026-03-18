@@ -13,7 +13,7 @@ struct DiaryScreen: View {
     @State var period = ["Semaine", "Mois", "Année"]
     
     //Lien avec la VM DiaryViewModel
-    @StateObject private var vmDiary = DiaryViewModel()
+    @StateObject var vmDiary = DiaryViewModel()
     
     //Chargement de la page
     @State var isLoading = true

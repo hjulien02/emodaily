@@ -30,13 +30,13 @@ struct EntryOptionView<Content: View>: View {
                 }
                 .offset(y: 24)
 
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .center, spacing: 16) {
                     content()
                 }
                 .padding(24)
                 .frame(
                     maxWidth: .infinity,
-                    alignment: .leading
+                    alignment: .center
                 )
                 .background(
                     RoundedRectangle(cornerRadius: 20)

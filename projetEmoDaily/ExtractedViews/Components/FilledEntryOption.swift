@@ -40,7 +40,7 @@ struct FilledEntryOption: View {
                             image
                                 .resizable()
                                 .scaledToFill()
-                                .frame(maxWidth: 80, maxHeight: 80)
+                                .frame(maxWidth: .infinity, maxHeight: 80)
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
                                 .background(RoundedRectangle(cornerRadius: 12).stroke(.white.opacity(0.4), lineWidth: 2))
 
@@ -52,7 +52,7 @@ struct FilledEntryOption: View {
             }
         }
         .padding(12)
-        .frame(maxWidth: 100, maxHeight: 100)
+        .frame(maxWidth: .infinity, maxHeight: 100)
         .background(RoundedRectangle(cornerRadius: 20).fill(.green2).stroke(.green3.opacity(0.4), lineWidth: 2))
         .foregroundStyle(Color.text)
     }

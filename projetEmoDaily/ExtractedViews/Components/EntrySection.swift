@@ -22,6 +22,7 @@ struct EntrySection<Content: View>: View {
                 if subtitle != "" {
                     Text(subtitle!)
                         .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
                 }
             }
             

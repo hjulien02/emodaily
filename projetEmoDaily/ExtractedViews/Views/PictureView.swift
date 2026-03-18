@@ -39,6 +39,8 @@ struct PictureView: View {
                     .italic()
                     .bold()
                     .opacity(0.5)
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, 12)
                 
                 if isUploading {
                     ProgressView("Upload en cours...")
@@ -54,11 +56,12 @@ struct PictureView: View {
                     } label: {
                         HStack(spacing: 8) {
                             Image(systemName: "plus.circle.fill")
-                            Text("Choisi ta photo")
+                            Text("Choisir une photo")
                                 .font(.system(size: 12))
                                 .bold()
                         }
                         .opacity(0.5)
+                        .frame(maxWidth: .infinity, alignment: .center)
                     }
                     
                     if let selectedImage {
