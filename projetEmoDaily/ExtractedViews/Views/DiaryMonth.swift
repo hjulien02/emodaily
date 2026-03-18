@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DiaryMonth: View {
 
-    //Recoit le VM depuis le parent DiaryScreen
+    //Recoit la VM depuis le parent DiaryScreen
     @ObservedObject var vmDiary: DiaryViewModel
 
     var body: some View {

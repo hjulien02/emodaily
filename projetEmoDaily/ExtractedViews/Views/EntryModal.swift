@@ -159,7 +159,8 @@ struct EntryModal: View {
             anxiety: .low,
             energy: .veryhigh,
             appetite: .low,
-            sleep: .allnighter
+            sleep: .allnighter,
+            user: [""]
         )
     )
 }

@@ -8,25 +8,38 @@
 import SwiftUI
 
 struct DiaryScreen: View {
-
+    
     @State var selectedPeriod = "Mois"
     @State var period = ["Semaine", "Mois", "Année"]
-
+    
+    //Lien avec la VM DiaryViewModel
     @StateObject private var vmDiary = DiaryViewModel()
-
+    
     //Chargement de la page
     @State var isLoading = true
-
+    
+    func makeFakeEntry() -> Entry {
+        return Entry(
+            date: Date(),
+            emotion: .unchosen,
+            anxiety: .low,
+            energy: .low,
+            appetite: .low,
+            sleep: .allnighter,
+            user: [""]
+        )
+    }
+    
     var body: some View {
-
+        
         NavigationStack {
             ZStack {
-
+                
                 Color.bg.ignoresSafeArea()
-
+                
                 VStack {
                     Title(title: "Journal")
-
+                    
                     //Affichage des periodes
                     HStack {
                         ForEach(period, id: \.self) { onePeriod in
@@ -37,9 +50,7 @@ struct DiaryScreen: View {
                         }
                     }
                     .padding(.bottom, 10)
-
-                    //Affichage du calendrier (par semaine, mois ou année)
-
+                    
                     //Chargement
                     if isLoading {
                         ProgressView("Chargement des données")
@@ -48,7 +59,8 @@ struct DiaryScreen: View {
                             .scaleEffect(1.1)
                             .frame(maxHeight: .infinity)
                     } else {
-
+                        
+                        //Affichage du calendrier (par semaine, mois ou année)
                         ScrollView {
                             if period[0].description == selectedPeriod {
                                 DiaryWeek(vmDiary: vmDiary)
@@ -59,16 +71,18 @@ struct DiaryScreen: View {
                             }
                         }
                     }
-
+                    
                     //Ajout d'une entrée
-                    NavigationLink("+", destination: NewEntryScreen())
-                        .foregroundStyle(.white)
-                        .bold()
-                        .frame(width: 64, height: 64)
-                        .background(.green4)
-                        .clipShape(Circle())
-                        .shadow(color: .white, radius: 10)
-
+                    NavigationLink("+") {
+                        NewEntryScreen(vmEntries: $vmDiary.vmEntries, vmUser: $vmDiary.vmUser, entriesList: $vmDiary.entriesList, currentEntry: makeFakeEntry(), selectedEmotion: makeFakeEntry().emotion, note: makeFakeEntry().notes!)
+                    }
+                    .foregroundStyle(.white)
+                    .bold()
+                    .frame(width: 64, height: 64)
+                    .background(.green4)
+                    .clipShape(Circle())
+                    .shadow(color: .white, radius: 10)
+                    
                 }
                 .padding()
             }
@@ -79,9 +93,11 @@ struct DiaryScreen: View {
             await vmDiary.loadData()
             isLoading = false
         }
+
     }
 }
 
 #Preview {
     DiaryScreen()
 }
+
