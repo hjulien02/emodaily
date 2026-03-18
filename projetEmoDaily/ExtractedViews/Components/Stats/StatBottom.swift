@@ -10,13 +10,13 @@ import SwiftUI
 
 struct StatBottom: View {
     let label: String
-    let valeur: String
+    let value: String
 
     var body: some View {
         VStack(spacing: 2) {
             Text(label)
                 .font(.caption.weight(.semibold))
-            Text(valeur)
+            Text(value)
                 .font(.subheadline.weight(.bold))
         }
         .frame(maxWidth: .infinity)
@@ -29,6 +29,6 @@ struct StatBottom: View {
 
 
 #Preview {
-    StatBottom(label: "singe", valeur: "4")
+    StatBottom(label: "singe", value: "4")
 }
 

@@ -7,16 +7,16 @@
 import SwiftUI
 
 struct MoodStat: View {
-    let couleur: Color
-    let pourcentage: String
+    let color: Color
+    let percentage: String
     let emoji: String
 
     var body: some View {
         HStack(spacing: 8) {
             RoundedRectangle(cornerRadius: 4)
-                .fill(couleur)
+                .fill(color)
                 .frame(width: 22, height: 22)
-            Text(pourcentage)
+            Text(percentage)
                 .font(.subheadline.weight(.semibold))
             Text(emoji)
         }

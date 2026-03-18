@@ -1,5 +1,5 @@
 //
-//  DefiComponent.swift
+//  ChallengeComponent.swift
 //  projetEmoDaily
 //
 //  Created by Apprenent 151 on 10/03/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DefiComponent: View {
+struct ChallengeComponent: View {
     let challenge: Challenge
     
     // barre de progression (130px) et ratio
@@ -88,5 +88,5 @@ struct DefiComponent: View {
 }
 
 #Preview {
-    DefiComponent(challenge: Challenge(id: "1", title: "Streak 5 Jours", questDescription: "Enregistrez 5 entrées consécutives!", progress: 1, total: 10, questType: "challenge", challengeType: .multi, image: "🔥", startDate: Date(), endDate: Date().addingTimeInterval(60*60*24*280), isCompleted: false))
+    ChallengeComponent(challenge: Challenge(id: "1", title: "Streak 5 Jours", questDescription: "Enregistrez 5 entrées consécutives!", progress: 1, total: 10, questType: "challenge", challengeType: .multi, image: "🔥", startDate: Date(), endDate: Date().addingTimeInterval(60*60*24*280), isCompleted: false))
 }

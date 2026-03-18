@@ -33,33 +33,13 @@ struct StampPopup: View {
 
             VStack {
                 // 1/4: titre / navigation
-                HStack {
-                    Button {
-                        prevIndex()
-                    } label: {
-                        Text("<")
-                            .font(.system(size: 20))
-                            .bold()
-                    }
-                    .opacity(hasPrev ? 1 : 0)
-                    .disabled(!hasPrev)
-
-                    Spacer()
-                    Text(stamp.title)
-                        .font(.title2)
-                        .bold()
-                        .frame(maxWidth: .infinity)
-
-                    Button {
-                        nextIndex()
-                    } label: {
-                        Text(">")
-                            .font(.system(size: 20))
-                            .bold()
-                    }
-                    .opacity(hasNext ? 1 : 0)
-                    .disabled(!hasNext)
-                }
+                PopupNavigation(
+                    nextIndex: nextIndex,
+                    prevIndex: prevIndex,
+                    hasPrev: hasPrev,
+                    hasNext: hasNext,
+                    title: stamp.title
+                )
                 .padding(.init(top: 15, leading: 15, bottom: 7.5, trailing: 15))
 
                 // 2/4: description

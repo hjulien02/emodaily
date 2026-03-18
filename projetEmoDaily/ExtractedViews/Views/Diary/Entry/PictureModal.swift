@@ -1,5 +1,5 @@
 //
-//  PictureView.swift
+//  PictureModal.swift
 //  projetEmoDaily
 //
 //  Created by Apprenant 148 on 12/03/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PictureView: View {
+struct PictureModal: View {
     @Binding var entry: Entry
 
     @State private var showingImagePicker = false
@@ -31,7 +31,7 @@ struct PictureView: View {
             Color.bg
                 .ignoresSafeArea()
 
-            EntryOptionView(
+            EntryOptionModal(
                 image: "photo.circle.fill",
                 option: "Photo"
             ) {
@@ -139,6 +139,6 @@ struct PictureView: View {
         sleep: .sleep,
         user: [""]
     )
-    PictureView(entry: .constant(sampleEntry), showingPicturePopover: .constant(true), entryImage: .constant(sampleEntry.image))
+    PictureModal(entry: .constant(sampleEntry), showingPicturePopover: .constant(true), entryImage: .constant(sampleEntry.image))
 }
 

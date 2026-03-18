@@ -55,7 +55,7 @@ struct ChallengeScreen: View {
                     ScrollView {
                         VStack (spacing: 20) {
                             ForEach(filterChallenges()) { challenge in
-                                DefiComponent(challenge: challenge)
+                                ChallengeComponent(challenge: challenge)
                             }
                         }
                     }

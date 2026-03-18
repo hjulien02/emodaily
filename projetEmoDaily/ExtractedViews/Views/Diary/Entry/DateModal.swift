@@ -1,5 +1,5 @@
 //
-//  DateView.swift
+//  DateModal.swift
 //  projetEmoDaily
 //
 //  Created by Apprenant 148 on 17/03/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DateView: View {
+struct DateModal: View {
 
     var dateRange: ClosedRange<Date> {
         let calendar = Calendar.current
@@ -72,5 +72,5 @@ struct DateView: View {
     @Previewable @State var selectedDate: Date = Calendar.current.date(
            byAdding: .day, value: -3, to: Date.now) ?? Date.now
 
-    DateView(showingDatePicker: $showingPicker, selectedDate: $selectedDate)
+    DateModal(showingDatePicker: $showingPicker, selectedDate: $selectedDate)
 }
