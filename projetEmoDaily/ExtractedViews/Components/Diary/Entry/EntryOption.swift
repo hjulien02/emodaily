@@ -23,7 +23,7 @@ struct EntryOption: View {
             Text(optionTitle)
                 .font(.system(size: 12))
         }
-        .frame(minWidth: 100, minHeight: 100)
+        .frame(maxWidth: .infinity, minHeight: 100)
         .background(RoundedRectangle(cornerRadius: 20).fill(.green4).stroke(.green15.opacity(0.4), lineWidth: 2))
         .foregroundStyle(Color.white)
     }

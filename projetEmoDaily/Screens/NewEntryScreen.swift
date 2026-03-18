@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct NewEntryScreen: View {
+    @Environment(\.presentationMode) var presentationMode
+    
     @Binding var vmEntries: EntriesViewModel
     @Binding var vmUser: UsersViewModel
     @Binding var entriesList: [Entry]
     
-    @State var showingDatePopoup: Bool = false
+    @State var showingDatePopup: Bool = false
     @State var selectedDate: Date = Date()
     
     @State var currentEntry: Entry
@@ -25,7 +27,7 @@ struct NewEntryScreen: View {
     @State var selectedEmotion: Emotion
     
     @State private var showingNotePopover = false
-    @State var note: String = ""
+    @State var note: String
     
     @State private var showingPicturePopover = false
     @State var image: [Attachment]?
@@ -48,7 +50,9 @@ struct NewEntryScreen: View {
     let sleepIcons = SleepLevel.allCases.map { $0.getSymbol() }
     @State var sleepIndex = 0
     
-    @State var alertUser: Bool = false
+    @State var alertUserDate: Bool = false
+    @State var alertUserEmotion: Bool = false
+
     
     var body: some View {
         ZStack {
@@ -59,7 +63,7 @@ struct NewEntryScreen: View {
                 //Picker pour changer la date
                 HStack {
                     Button {
-                        showingDatePopoup = true
+                        showingDatePopup = true
                     } label: {
                         Text(
                             selectedDate.formatted(
@@ -68,13 +72,15 @@ struct NewEntryScreen: View {
                                 ).locale(Locale(identifier: "fr_FR"))
                             ).capitalized
                         )
-                        .padding(.vertical, 4)
+                        .padding(.vertical, 8)
                         .padding(.horizontal, 16)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
-                                .stroke(.green4, lineWidth: 1)
+                                .fill(.green4)
                         )
-                        .foregroundStyle(.green4)
+                        .font(.system(size: 20))
+                        .foregroundStyle(.white)
+//                        .bold()
                     }
                     
                 }
@@ -210,9 +216,16 @@ struct NewEntryScreen: View {
                         
                         // CTA
                         Button {
+                            print("selectedDate: \(selectedDate)")
+                            for entry in entriesList {
+                                print("entry.date: \(entry.date) | isSameDay: \(Calendar.current.isDate(entry.date, inSameDayAs: selectedDate))")
+                            }
+                            
                             if selectedEmotion.rawValue ==  "" {
-                                alertUser = true
-                            } else {
+                                alertUserEmotion = true
+                            } else if entriesList.contains(where: { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }) {
+                                alertUserDate = true
+                                } else {
                                 Task {
                                     currentEntry.anxiety =
                                     AnxietyLevel.allCases[anxietyIndex]
@@ -239,6 +252,7 @@ struct NewEntryScreen: View {
                                             var newList = entriesList
                                             newList.append(entry)
                                             entriesList = newList
+                                            self.presentationMode.wrappedValue.dismiss()
                                         }
                                     } catch {
                                         print(error)
@@ -263,23 +277,26 @@ struct NewEntryScreen: View {
                 }
             }
             
-            if showingDatePopoup || alertUser {
+            if showingDatePopup || alertUserEmotion || alertUserDate {
                 // Fond semi-transparent
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()
                     .onTapGesture {
                         // Fermer le pop-up en cliquant en dehors
-                        showingDatePopoup = false
-                        alertUser = false
+                        showingDatePopup = false
+                        alertUserEmotion = false
+                        alertUserDate = false
                     }
                 
-                if showingDatePopoup {
+                if showingDatePopup {
                     DateModal(
-                        showingDatePicker: $showingDatePopoup,
+                        showingDatePicker: $showingDatePopup,
                         selectedDate: $selectedDate
                     )
-                } else {
-                    UserAlert(showAlert: $alertUser, title: "Tu n'as pas d'émotion sélectionnée !", message: "Choisis une émotion dans \"Comment s'est passé ta journée\" avant d'enregistrer.", cancel: "J'y vais !")
+                } else if alertUserEmotion {
+                    UserAlert(showAlert: $alertUserEmotion, type: "🤔" , title: "Tu n'as pas d'émotion sélectionnée !", message: "Choisis une émotion dans \"Comment s'est passé ta journée\" avant d'enregistrer.", cancel: "J'y vais !")
+                } else if alertUserDate {
+                    UserAlert(showAlert: $alertUserDate, type: "🤔" , title: "Cette date a déjà une entrée !", message: "Choisis une autre date avant d'enregistrer.", cancel: "J'y vais !")
                 }
             }
         }.foregroundStyle(.text)

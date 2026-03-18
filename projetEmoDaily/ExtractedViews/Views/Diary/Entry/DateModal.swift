@@ -30,7 +30,7 @@ struct DateModal: View {
                 .padding(.top, 16)
             VStack{
                 DatePicker(
-                    "Sélectionne la date",
+                    "",
                     selection: $selectedDate,
                     in: dateRange,
                     displayedComponents: [.date]

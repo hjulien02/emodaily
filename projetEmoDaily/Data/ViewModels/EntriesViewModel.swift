@@ -39,7 +39,7 @@ class EntriesViewModel {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd"
             formatter.locale = Locale(identifier: "en_US_POSIX")
-
+            formatter.timeZone = TimeZone(identifier: "Europe/Paris")
             decoder.dateDecodingStrategy = .formatted(formatter)
 
             let decoded = try decoder.decode(EntryRecord.self, from: data)

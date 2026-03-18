@@ -7,7 +7,7 @@
 
 import Foundation
 import Observation
-import SwiftUI
+import SwiftUI 
 
 struct UsersResponse: Codable {
     let records: [UserRecord]

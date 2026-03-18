@@ -11,6 +11,7 @@ struct UserAlert: View {
     
     @Binding var showAlert: Bool
     
+    var type: String
     var title: String
     var message: String
     var cancel: String
@@ -18,7 +19,7 @@ struct UserAlert: View {
     var body: some View {
         VStack(alignment: .center, spacing: 24) {
             VStack(alignment: .center, spacing: 4){
-                Text("🤔")
+                Text(type)
                     .font(.system(size: 24))
                     .padding(.top, 8)
 
@@ -66,5 +67,5 @@ struct UserAlert: View {
     @Previewable @State var showAlert: Bool = false
 
 
-    UserAlert(showAlert: $showAlert, title: "Tu n'as pas donné ton mood !", message: "Renseigne ton humeur de la journée avant d'enregistrer", cancel: "J'y vais de ce pas")
+    UserAlert(showAlert: $showAlert, type: "🤔", title: "Tu n'as pas donné ton mood !", message: "Renseigne ton humeur de la journée avant d'enregistrer", cancel: "J'y vais de ce pas")
 }

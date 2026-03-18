@@ -39,7 +39,6 @@ class DiaryViewModel: ObservableObject {
         }
         
         //Vide la liste car possibilité de doublons avec le chargement
-        entriesList.removeAll()
         
         if let entries = vmUser.connectedUser.entries {
             

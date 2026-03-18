@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NoteModal: View {
     @State var note: String = ""
+
     @Binding var entryNotes: String
     
     @Binding var showingNotePopover: Bool
@@ -22,18 +23,11 @@ struct NoteModal: View {
                 image: "character.circle.fill",
                 option: "Note"
             ) {
-                Text("Que se passe-t-il ?")
-                    .italic()
-                    .bold()
-                    .opacity(0.5)
-
-                TextField("Ecris ici...", text: $note, axis: .vertical)
-                    .font(.system(size: 12))
+                TextField("Que se passe-t-il ?", text: $entryNotes, axis: .vertical)
 
                 Spacer()
 
             } optionAction: {
-                entryNotes = note
                 showingNotePopover = false
             }
 
