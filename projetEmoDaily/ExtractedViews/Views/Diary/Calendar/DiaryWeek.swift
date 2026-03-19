@@ -10,13 +10,11 @@ import SwiftUI
 struct DiaryWeek: View {
 
     @ObservedObject var vmDiary: DiaryViewModel
-
     let rows = Array(repeating: GridItem(.flexible()), count: 7)
 
     var body: some View {
 
         VStack {
-
             // Header - Semaine
             WeekdayHeader(
                 displayedDate: $vmDiary.displayedMonth,
@@ -89,11 +87,9 @@ struct DiaryWeek: View {
                             .frame(width: 262, alignment: .leading)
                             .background(.green2)
                             .clipShape(RoundedRectangle(cornerRadius: 20))
-                        }///end HStack
-
-                    }///end isCurrentWeek
-
-                }///end ForEach
+                        }// end HStack
+                    }// end isCurrentWeek
+                }// end ForEach
                 
                     // Si contrôle de la modal avec une valeur optionnel => item
                     // Si données => ouvre la modal
@@ -103,7 +99,7 @@ struct DiaryWeek: View {
                             .presentationDragIndicator(.visible)
                     }
 
-            }///end LazyHGrid
+            }// end LazyHGrid
                 .frame(height: 374)
         }
         .padding()

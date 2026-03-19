@@ -18,11 +18,8 @@ struct EntryModal: View {
     var body: some View {
 
         ZStack {
-
             Color.bg.ignoresSafeArea()
-
             VStack {
-
                 // Date selectionnée
                 Text(
                     entry.date.formatted(
@@ -66,7 +63,6 @@ struct EntryModal: View {
                                 entry: entry.energy.rawValue
                             )
                         }
-
                         HStack {
                             StateDay(
                                 emoji: entry.appetite.getSymbol(),
@@ -80,7 +76,7 @@ struct EntryModal: View {
                                 entry: entry.sleep.rawValue
                             )
                         }
-                    }///end VStack
+                    }// end VStack
                         .padding(.vertical)
 
                     // Notes
@@ -98,7 +94,7 @@ struct EntryModal: View {
                         }
                         .padding(.bottom)
                     }
-
+                    
                     // Photos
                     if let url = entry.image?.first?.url {
                         VStack(alignment: .leading) {
@@ -108,7 +104,6 @@ struct EntryModal: View {
                                     .bold()
                                 Spacer()
                             }
-
                             //Affiche l'image
                             AsyncImage(url: url) { image in
                                 image
@@ -122,7 +117,7 @@ struct EntryModal: View {
                         }
                         .padding(.bottom)
                     }
-                }///end ScrollView
+                }// end ScrollView
                 .scrollIndicators(.hidden)
 
                 // Bouton - Modifier l'entrée que pour le jour même
@@ -141,9 +136,9 @@ struct EntryModal: View {
 
                 Spacer()
                 
-            }///end VStack
+            }// end VStack
                 .padding()
-        }///end ZStack
+        }// end ZStack
 
     }
 }

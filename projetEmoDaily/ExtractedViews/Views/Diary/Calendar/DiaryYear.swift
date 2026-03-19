@@ -21,9 +21,7 @@ struct DiaryYear: View {
     }
 
     var body: some View {
-
         VStack {
-
             // Header
             WeekdayHeader(
                 displayedDate: $vmDiary.displayedMonth,
@@ -42,7 +40,6 @@ struct DiaryYear: View {
             // Affiche le mois actuel en premier
             ScrollViewReader { proxy in
                 ScrollView {
-
                     VStack {
                         ForEach(
                             // Génère les 12 mois de l'année
@@ -55,7 +52,6 @@ struct DiaryYear: View {
                             id: \.self
                         ) {
                             month in
-
                             // Filtre les entrées du mois courant
                             let entriesForMonth = vmDiary.entriesList.filter {
                                 Calendar.current.isDate(
@@ -87,8 +83,7 @@ struct DiaryYear: View {
                             }
                             .padding(.vertical)
                         }
-                    }
-
+                    }// end VStack
                     // Scroll automatique vers le mois actuel
                     // Remet à Janvier au clic de l'année suivante
                     .task(id: vmDiary.displayedMonth) {
@@ -97,12 +92,9 @@ struct DiaryYear: View {
                             anchor: .top
                         )
                     }
-
-                }///end ScrollView
+                }// end ScrollView
                 .scrollIndicators(.hidden)
-
-            }///end ScrollViewReader
-
+            }// end ScrollViewReader
         }
         .frame(height: 434)
         .padding()

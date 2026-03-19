@@ -50,7 +50,7 @@ struct MonthlyGrid: View {
                     }
 
                     VStack(spacing: 2) {
-                        // si entryForMonth existe et qu'elle est inclus dans isCurrentMonth
+                        // Si entryForMonth existe et qu'elle est inclus dans isCurrentMonth
                         if let entry = entryForMonth, isCurrentMonth {
                             Button {
                                 selectedEntry = entry

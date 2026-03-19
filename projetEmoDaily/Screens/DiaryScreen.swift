@@ -12,10 +12,9 @@ struct DiaryScreen: View {
     @State var selectedPeriod = "Mois"
     @State var period = ["Semaine", "Mois", "Année"]
     
-    //Lien avec la VM DiaryViewModel
+    // Lien avec la VM DiaryViewModel
     @StateObject var vmDiary = DiaryViewModel()
     
-    //Chargement de la page
     @State var isLoading = true
     
     func makeFakeEntry() -> Entry {
@@ -31,12 +30,9 @@ struct DiaryScreen: View {
     }
     
     var body: some View {
-        
         NavigationStack {
             ZStack {
-                
                 Color.bg.ignoresSafeArea()
-                
                 VStack {
                     Title(title: "Journal")
                     
