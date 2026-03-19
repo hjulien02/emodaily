@@ -26,13 +26,25 @@ struct NewEntryScreen: View {
     
     @State var selectedEmotion: Emotion
     
+    var columns = [GridItem(.flexible()), GridItem(.flexible())]
+
     @State private var showingNotePopover = false
     @State var note: String
     
     @State private var showingPicturePopover = false
     @State var image: [Attachment]?
     
-    var columns = [GridItem(.flexible()), GridItem(.flexible())]
+    @State private var showingImagePicker = false
+    @State private var selectedImage: Image?
+    @State private var inputImage: UIImage?
+    func loadImage() {
+        guard let inputImage else { return }
+        selectedImage = Image(uiImage: inputImage)
+    }
+    
+    @State private var isUploading = false
+    @State private var alertUserPicture = false
+    
     
     let anxietyValues = AnxietyLevel.allCases.map { $0.rawValue }
     let anxietyIcons = AnxietyLevel.allCases.map { $0.getSymbol() }
@@ -151,13 +163,24 @@ struct NewEntryScreen: View {
                                 }
                                 
                                 Button {
-                                    showingPicturePopover = true
+                                    showingImagePicker = true
                                 } label: {
-                                    if image != nil {
-                                        FilledEntryOption(
-                                            icon: "photo.circle.fill",
-                                            picture: image
-                                        )
+                                    if isUploading {
+                                        ProgressView("Upload en cours...")
+                                            .foregroundStyle(.green4)
+                                            .padding(12)
+                                            .frame(maxWidth: .infinity, maxHeight: 100)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 20).fill(.green2).stroke(
+                                                    .green3.opacity(0.4),
+                                                    lineWidth: 2
+                                                )
+                                            )
+                                    } else if image != nil {
+                                            FilledEntryOption(
+                                                icon: "photo.circle.fill",
+                                                picture: image
+                                            )
                                     } else {
                                         EntryOption(
                                             icon: "photo.circle.fill",
@@ -166,17 +189,31 @@ struct NewEntryScreen: View {
                                     }
                                     
                                 }
-                                .popover(
-                                    isPresented: $showingPicturePopover
-                                ) {
-                                    PictureModal(
-                                        entry: $currentEntry,
-                                        showingPicturePopover:
-                                            $showingPicturePopover,
-                                        entryImage: $image
-                                    )
+                                .onChange(of: inputImage) {
+                                    guard let picture = inputImage else { return }
+                                    
+                                    Task {
+                                        do {
+                                            isUploading = true
+                                            let attachment = try await currentEntry.uploadImageAsAttachment(picture)
+                                            
+                                            await MainActor.run {
+                                                image = [attachment]
+                                                loadImage()
+                                                isUploading = false
+                                            }
+
+                                        } catch {
+                                            print("Erreur upload image: \(error)")
+                                            
+                                            alertUserPicture = true
+                                            
+                                            await MainActor.run {
+                                                isUploading = false
+                                            }
+                                        }
+                                    }
                                 }
-                                
                             }
                             
                         }  //SECTION OPTIONS
@@ -217,11 +254,6 @@ struct NewEntryScreen: View {
                         
                         // CTA
                         Button {
-                            print("selectedDate: \(selectedDate)")
-                            for entry in entriesList {
-                                print("entry.date: \(entry.date) | isSameDay: \(Calendar.current.isDate(entry.date, inSameDayAs: selectedDate))")
-                            }
-                            
                             if selectedEmotion.rawValue ==  "" {
                                 alertUserEmotion = true
                             } else if entriesList.contains(where: { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }) {
@@ -279,7 +311,7 @@ struct NewEntryScreen: View {
                 .scrollIndicators(.hidden)
             }
             
-            if showingDatePopup || alertUserEmotion || alertUserDate {
+            if showingDatePopup || alertUserEmotion || alertUserDate || alertUserPicture {
                 // Fond semi-transparent
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()
@@ -288,6 +320,7 @@ struct NewEntryScreen: View {
                         showingDatePopup = false
                         alertUserEmotion = false
                         alertUserDate = false
+                        alertUserPicture = false
                     }
                 
                 if showingDatePopup {
@@ -299,6 +332,8 @@ struct NewEntryScreen: View {
                     UserAlert(showAlert: $alertUserEmotion, type: "🤔" , title: "Tu n'as pas d'émotion sélectionnée !", message: "Choisis une émotion dans \"Comment s'est passé ta journée\" avant d'enregistrer.", cancel: "J'y vais !")
                 } else if alertUserDate {
                     UserAlert(showAlert: $alertUserDate, type: "🤔" , title: "Cette date a déjà une entrée !", message: "Choisis une autre date avant d'enregistrer.", cancel: "J'y vais !")
+                } else if alertUserPicture {
+                    UserAlert(showAlert: $alertUserPicture, type: "😰", title: "Une erreur s'est produite...", message: "Ton image n'a pas pu s'uploader sur l'application.", cancel: "Je réessaye !")
                 }
             }
         }.foregroundStyle(.text)
@@ -306,6 +341,9 @@ struct NewEntryScreen: View {
                 ToolbarItem(placement: .principal) {
                     ChildScreenTitle(title: "Nouvelle entrée")
                 }
+            }
+            .sheet(isPresented: $showingImagePicker) {
+                ImagePicker(image: $inputImage)
             }
             .task {
                 do {

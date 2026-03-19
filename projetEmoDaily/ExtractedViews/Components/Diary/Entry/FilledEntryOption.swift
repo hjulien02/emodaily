@@ -8,21 +8,21 @@
 import SwiftUI
 
 struct FilledEntryOption: View {
-    
+
     var icon: String
     var notes: String?
     var picture: [Attachment]?
-    
+
     var body: some View {
-        
-        VStack(spacing: 16){
+
+        VStack(spacing: 16) {
             if icon == "character.circle.fill" {
                 Image(systemName: icon)
                     .resizable()
                     .scaledToFit()
                     .frame(maxWidth: 16)
-                
-                VStack(alignment: .center){
+
+                VStack(alignment: .center) {
                     Text(notes!.lowercased())
                         .font(.system(size: 12))
                         .multilineTextAlignment(.center)
@@ -31,9 +31,9 @@ struct FilledEntryOption: View {
                         .opacity(0.8)
                 }
                 .frame(maxWidth: .infinity)
-                
+
             } else if icon == "photo.circle.fill" {
-                VStack{
+                VStack {
                     if let url = picture?.first?.url {
                         AsyncImage(url: url) { image in
                             image
@@ -41,10 +41,18 @@ struct FilledEntryOption: View {
                                 .scaledToFill()
                                 .frame(maxWidth: .infinity, maxHeight: 80)
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
-                                .background(RoundedRectangle(cornerRadius: 12).stroke(.white.opacity(0.4), lineWidth: 2))
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12).stroke(
+                                        .white.opacity(0.4),
+                                        lineWidth: 2
+                                    )
+                                )
 
                         } placeholder: {
-                            ProgressView()
+                            ProgressView("Upload en cours...")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .foregroundStyle(.green4)
+                                .bold()
                         }
                     }
                 }
@@ -52,13 +60,23 @@ struct FilledEntryOption: View {
         }
         .padding(12)
         .frame(maxWidth: .infinity, maxHeight: 100)
-        .background(RoundedRectangle(cornerRadius: 20).fill(.green2).stroke(.green3.opacity(0.4), lineWidth: 2))
+        .background(
+            RoundedRectangle(cornerRadius: 20).fill(.green2).stroke(
+                .green3.opacity(0.4),
+                lineWidth: 2
+            )
+        )
         .foregroundStyle(Color.text)
     }
 }
 
 #Preview {
-    FilledEntryOption(icon: "character.circle.fill", notes: "Mon chat est tombé malade...")
-    FilledEntryOption(icon: "photo.circle.fill", picture: nil)
+    FilledEntryOption(
+        icon: "character.circle.fill",
+        notes: "Mon chat est tombé malade...",
+    )
+    FilledEntryOption(
+        icon: "photo.circle.fill",
+        picture: nil,
+    )
 }
-

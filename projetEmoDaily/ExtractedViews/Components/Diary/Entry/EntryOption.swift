@@ -13,17 +13,17 @@ struct EntryOption: View {
     var optionTitle: String
     
     var body: some View {
-        VStack(spacing: 16){
-            Image(systemName: icon)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 32)
-            Text(optionTitle)
-                .font(.system(size: 12))
-        }
-        .frame(maxWidth: .infinity, minHeight: 100)
-        .background(RoundedRectangle(cornerRadius: 20).fill(.green4).stroke(.green15.opacity(0.4), lineWidth: 2))
-        .foregroundStyle(Color.white)
+            VStack(spacing: 16){
+                Image(systemName: icon)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 32)
+                Text(optionTitle)
+                    .font(.system(size: 12))
+            }
+            .frame(maxWidth: .infinity, minHeight: 100)
+            .background(RoundedRectangle(cornerRadius: 20).fill(.green4).stroke(.green15.opacity(0.4), lineWidth: 2))
+            .foregroundStyle(Color.white)
     }
 }
 
