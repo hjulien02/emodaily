@@ -91,7 +91,7 @@ struct ProfileScreen: View {
                                 Image(systemName: "tv.fill")
                                     .font(.system(size: 17, weight: .medium))
                             }
-                            Text("Écran et Apparence")
+                            Text("Écran et apparence")
                                 .bold()
                         }
 
