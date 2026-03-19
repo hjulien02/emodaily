@@ -10,8 +10,8 @@ import SwiftUI
 struct StatsScreen: View {
 
     @State private var moisActuel = "Mars 2026"
-    @State private var semaineActuelle = "Semaine 10"
-    @State private var jourSelectionne = 10
+    @State private var semaineActuelle = "Semaine 12"
+    @State private var jourSelectionne = 20
 
     @State private var nbEntrees: Int = 0
     @State private var nbChallenges: Int = 0
@@ -25,8 +25,8 @@ struct StatsScreen: View {
     @State private var popupIndex: Int? = nil
 
     private let jours: [(lettre: String, numero: Int)] = [
-        ("L", 17), ("M", 18), ("M", 19), ("J", 20),
-        ("V", 21), ("S", 22), ("D", 23),
+        ("L", 16), ("M", 17), ("M", 18), ("J", 19),
+        ("V", 20), ("S", 21), ("D", 22),
     ]
 
     var body: some View {
@@ -53,191 +53,225 @@ struct StatsScreen: View {
                             .scaleEffect(1.1)
                             .frame(maxHeight: .infinity)
                     } else {
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 24) {
-
-                                VStack(spacing: 4) {
-                                    HStack(spacing: 24) {
-                                        Button {
-                                        } label: {
-                                            Image(systemName: "chevron.left")
-                                                .font(
-                                                    .system(
-                                                        size: 16,
-                                                        weight: .semibold
-                                                    )
-                                                )
-                                                .foregroundStyle(.black)
-                                        }
-                                        Text(moisActuel)
-                                            .font(.title3.weight(.semibold))
-                                            .foregroundStyle(.black)
-                                        Button {
-                                        } label: {
-                                            Image(systemName: "chevron.right")
-                                                .font(
-                                                    .system(
-                                                        size: 16,
-                                                        weight: .semibold
-                                                    )
-                                                )
-                                                .foregroundStyle(.black)
-                                        }
-                                    }
-                                    Text(semaineActuelle)
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
-                                }
-                                .frame(maxWidth: .infinity)
-
-                                HStack(spacing: 8) {
-                                    ForEach(jours, id: \.numero) { jour in
-                                        Button {
-                                            jourSelectionne = jour.numero
-                                        } label: {
-                                            VStack(spacing: 2) {
-                                                Text(jour.lettre)
-                                                    .font(
-                                                        .caption.weight(
-                                                            .semibold
-                                                        )
-                                                    )
-                                                Text("\(jour.numero)")
-                                                    .font(
-                                                        .caption.weight(.bold)
-                                                    )
-                                            }
-                                            .frame(maxWidth: .infinity)
-                                            .padding(.vertical, 8)
-                                            .background(
-                                                jourSelectionne == jour.numero
-                                                    ? Color("green1")
-                                                    : Color("green1").opacity(
-                                                        0.35
-                                                    )
-                                            )
-                                            .clipShape(
-                                                RoundedRectangle(
-                                                    cornerRadius: 10,
-                                                    style: .continuous
-                                                )
-                                            )
-                                            .foregroundStyle(.black)
-                                        }
-                                    }
-                                }
-
-                                Text("Mood")
-                                    .font(.title3.weight(.semibold))
-
+                        VStack(alignment: .leading, spacing: 24) {
+                            VStack(spacing: 4) {
                                 HStack(spacing: 24) {
-                                    ZStack {
-                                        Circle()
-                                            .trim(from: 0, to: 0.7)
-                                            .stroke(
-                                                Color("green4"),
-                                                lineWidth: 20
+                                    Button {
+                                    } label: {
+                                        Image(systemName: "chevron.left")
+                                            .font(
+                                                .system(
+                                                    size: 16,
+                                                    weight: .semibold
+                                                )
                                             )
-                                            .rotationEffect(.degrees(-90))
-                                        Circle()
-                                            .trim(from: 0.7, to: 0.9)
-                                            .stroke(
-                                                Color("green3"),
-                                                lineWidth: 20
+                                            .foregroundStyle(.black)
+                                    }
+                                    Text(moisActuel)
+                                        .font(.title3.weight(.semibold))
+                                        .foregroundStyle(.black)
+                                    Button {
+                                    } label: {
+                                        Image(systemName: "chevron.right")
+                                            .font(
+                                                .system(
+                                                    size: 16,
+                                                    weight: .semibold
+                                                )
                                             )
-                                            .rotationEffect(.degrees(-90))
-                                        Circle()
-                                            .trim(from: 0.9, to: 1.0)
-                                            .stroke(
-                                                Color("green2"),
-                                                lineWidth: 20
-                                            )
-                                            .rotationEffect(.degrees(-90))
-                                    }
-                                    .frame(width: 120, height: 120)
-
-                                    VStack(alignment: .leading, spacing: 12) {
-                                        MoodStat(
-                                            color: Color("green2"),
-                                            percentage: "10%",
-                                            emoji: "😊"
-                                        )
-                                        MoodStat(
-                                            color: Color("green3"),
-                                            percentage: "20%",
-                                            emoji: "😐"
-                                        )
-                                        MoodStat(
-                                            color: Color("green4"),
-                                            percentage: "70%",
-                                            emoji: "😔"
-                                        )
-                                    }
-                                    Spacer()
-                                }
-                                .padding(.top, 10)
-
-                                LazyVGrid(
-                                    columns: [
-                                        GridItem(.flexible()),
-                                        GridItem(.flexible()),
-                                    ],
-                                    spacing: 14
-                                ) {
-                                    Button {
-                                        popupIndex = 0
-                                    } label: {
-                                        CategoryCard(
-                                            icon: "bed.double.fill",
-                                            label: "Sommeil"
-                                        )
-                                    }
-                                    Button {
-                                        popupIndex = 1
-                                    } label: {
-                                        CategoryCard(
-                                            icon: "fork.knife",
-                                            label: "Appetit"
-                                        )
-                                    }
-                                    Button {
-                                        popupIndex = 2
-                                    } label: {
-                                        CategoryCard(
-                                            icon: "bolt.fill",
-                                            label: "Énergie"
-                                        )
-                                    }
-                                    Button {
-                                        popupIndex = 3
-                                    } label: {
-                                        CategoryCard(
-                                            icon: "waveform.path.ecg",
-                                            label: "Anxiété"
-                                        )
+                                            .foregroundStyle(.black)
                                     }
                                 }
-                                .padding(.top, 30)
-
-                                HStack(spacing: 10) {
-                                    StatBottom(
-                                        label: "Entrées",
-                                        value: "\(nbEntrees)"
-                                    )
-                                    StatBottom(
-                                        label: "Challenges",
-                                        value: "\(nbChallenges)"
-                                    )
-                                    StatBottom(
-                                        label: "Tampons",
-                                        value: "\(nbTampons)"
-                                    )
-                                }
-                                .padding(.top, 14)
+                                Text(semaineActuelle)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
                             }
-                            .padding(.horizontal, 25)
-                            .padding(.top, 8)
-                            .padding(.bottom, 32)
+                            .frame(maxWidth: .infinity)
+
+                            HStack(spacing: 8) {
+                                ForEach(jours, id: \.numero) { jour in
+                                    Button {
+                                        jourSelectionne = jour.numero
+                                    } label: {
+                                        VStack(spacing: 2) {
+                                            Text(jour.lettre)
+                                                .font(
+                                                    .caption.weight(
+                                                        .semibold
+                                                    )
+                                                )
+                                            Text("\(jour.numero)")
+                                                .font(
+                                                    .caption.weight(.bold)
+                                                )
+                                        }
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 8)
+                                        .background(
+                                            jourSelectionne == jour.numero
+                                                ? Color("green1")
+                                                : Color("green1").opacity(
+                                                    0.35
+                                                )
+                                        )
+                                        .clipShape(
+                                            RoundedRectangle(
+                                                cornerRadius: 10,
+                                                style: .continuous
+                                            )
+                                        )
+                                        .foregroundStyle(.black)
+                                    }
+                                }
+                            }
+                            .padding(
+                                .init(
+                                    top: 0,
+                                    leading: 16,
+                                    bottom: 0,
+                                    trailing: 16
+                                )
+                            )
+
+                            ScrollView {
+                                VStack {
+                                    HStack {
+                                        Text("Mood")
+                                            .font(.title3.weight(.semibold))
+                                        Spacer()
+                                    }
+                                    .padding(.bottom)
+
+                                    HStack(spacing: 24) {
+                                        ZStack {
+                                            Circle()
+                                                .trim(from: 0, to: 0.2)
+                                                .stroke(
+                                                    Color("green4"),
+                                                    lineWidth: 20
+                                                )
+                                                .rotationEffect(.degrees(-90))
+                                            Circle()
+                                                .trim(from: 0.2, to: 0.4)
+                                                .stroke(
+                                                    Color("green3"),
+                                                    lineWidth: 20
+                                                )
+                                                .rotationEffect(.degrees(-90))
+                                            Circle()
+                                                .trim(from: 0.4, to: 0.8)
+                                                .stroke(
+                                                    Color("green2"),
+                                                    lineWidth: 20
+                                                )
+                                                .rotationEffect(.degrees(-90))
+                                            Circle()
+                                                .trim(from: 0.8, to: 1)
+                                                .stroke(
+                                                    Color("green1"),
+                                                    lineWidth: 20
+                                                )
+                                                .rotationEffect(.degrees(-90))
+                                        }
+                                        .frame(width: 120, height: 120)
+
+                                        VStack(alignment: .leading, spacing: 12)
+                                        {
+                                            MoodStat(
+                                                color: Color("green2"),
+                                                percentage: "40%",
+                                                emoji: "😑"
+                                            )
+                                            MoodStat(
+                                                color: Color("green3"),
+                                                percentage: "20%",
+                                                emoji: "😴"
+                                            )
+                                            MoodStat(
+                                                color: Color("green4"),
+                                                percentage: "20%",
+                                                emoji: "🙂"
+                                            )
+                                            MoodStat(
+                                                color: Color("green4"),
+                                                percentage: "20%",
+                                                emoji: "😥"
+                                            )
+                                        }
+                                        Spacer()
+                                    }
+                                    .padding(
+                                        .init(
+                                            top: 0,
+                                            leading: 16,
+                                            bottom: 0,
+                                            trailing: 16
+                                        )
+                                    )
+
+                                    LazyVGrid(
+                                        columns: [
+                                            GridItem(.flexible()),
+                                            GridItem(.flexible()),
+                                        ],
+                                        spacing: 14
+                                    ) {
+                                        Button {
+                                            popupIndex = 0
+                                        } label: {
+                                            CategoryCard(
+                                                icon: "bed.double.fill",
+                                                label: "Sommeil"
+                                            )
+                                        }
+                                        Button {
+                                            popupIndex = 1
+                                        } label: {
+                                            CategoryCard(
+                                                icon: "fork.knife",
+                                                label: "Appetit"
+                                            )
+                                        }
+                                        Button {
+                                            popupIndex = 2
+                                        } label: {
+                                            CategoryCard(
+                                                icon: "bolt.fill",
+                                                label: "Énergie"
+                                            )
+                                        }
+                                        Button {
+                                            popupIndex = 3
+                                        } label: {
+                                            CategoryCard(
+                                                icon: "waveform.path.ecg",
+                                                label: "Anxiété"
+                                            )
+                                        }
+                                    }
+                                    .padding(.top, 30)
+
+                                    HStack(spacing: 10) {
+                                        StatBottom(
+                                            label: "Entrées",
+                                            value: "\(nbEntrees)"
+                                        )
+                                        StatBottom(
+                                            label: "Défis",
+                                            value: "\(nbChallenges)"
+                                        )
+                                        StatBottom(
+                                            label: "Tampons",
+                                            value: "\(nbTampons)"
+                                        )
+                                    }
+                                    .padding(.top, 14)
+                                }
+                                .padding(.horizontal, 25)
+                                .padding(.top, 8)
+                                .padding(.bottom, 32)
+                            }
+                            .scrollIndicators(.hidden)
                         }
                     }
                 }

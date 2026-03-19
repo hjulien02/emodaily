@@ -34,10 +34,6 @@ struct ProfileScreen: View {
                                             style: .continuous
                                         )
                                     )
-                                Image(systemName: "square.and.pencil")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundStyle(.black)
-                                    .offset(x: -1, y: -1)
                             }
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(vmUser.connectedUser.username)

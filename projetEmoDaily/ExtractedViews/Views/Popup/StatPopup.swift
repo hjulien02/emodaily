@@ -13,10 +13,10 @@ struct StatPopup: View {
 
     var barData: [CGFloat] {
         switch currentIndex {
-        case 0: return [2, 4, 1, 0, 2, 3, 4]
-        case 1: return [1, 3, 2, 0, 3, 2, 4]
-        case 2: return [1, 4, 4, 3, 0, 2, 3]
-        case 3: return [1, 3, 4, 4, 3, 0, 4]
+        case 0: return [3, 4, 2, 4, 2, 0, 0]
+        case 1: return [3, 1, 5, 3, 3, 0, 0]
+        case 2: return [2, 1, 4, 1, 3, 0, 0]
+        case 3: return [4, 2, 5, 2, 4, 0, 0]
         default: return []
         }
     }
@@ -71,10 +71,11 @@ struct StatPopup: View {
                     }
                 }
 
-                Text("sur \(barData.count) jours")
+                Text("(en jours)")
                     .font(.system(size: 16))
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
+                    .padding(.top, -12)
             }
             .padding(20)
             .frame(width: .infinity)

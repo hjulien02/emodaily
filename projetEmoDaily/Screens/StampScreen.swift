@@ -43,6 +43,7 @@ struct StampScreen: View {
                             }
                         }
                     }
+                    .scrollIndicators(.hidden)
                 }
             }
             .padding()
